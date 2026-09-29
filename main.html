@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Akshar — learn to read Devanagari</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2317262A'/><rect x='12' y='24' width='76' height='9' fill='%23F0A830'/><text x='50' y='84' font-size='62' text-anchor='middle' fill='%23EAF0EC'>अ</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E4EAE7; --surface:#F6F8F7; --sunk:#D9E1DD; --ink:#13282B; --muted:#52686A;
+  --accent:#B56F00; --accent-ink:#FFFFFF; --good:#2F7D4E; --bad:#B63A2B; --line:#C3CFCA;
+  --good-bg:#DCEFE2; --bad-bg:#F6DEDA;
+  --deva-serif:"Tiro Devanagari Hindi","Noto Serif Devanagari","Kohinoor Devanagari","Devanagari Sangam MN","Nirmala UI","Mangal",serif;
+  --deva-sans:"Mukta","Noto Sans Devanagari","Kohinoor Devanagari","Devanagari MT","Nirmala UI","Mangal",sans-serif;
+  --ui:"Mukta","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#17262A; --surface:#1F3237; --sunk:#152225; --ink:#EAF0EC; --muted:#9FB3AD;
+    --accent:#F0A830; --accent-ink:#17262A; --good:#6CC18A; --bad:#F0735E; --line:#2F474C;
+    --good-bg:#1E3B2C; --bad-bg:#43262A;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17262A; --surface:#1F3237; --sunk:#152225; --ink:#EAF0EC; --muted:#9FB3AD;
+  --accent:#F0A830; --accent-ink:#17262A; --good:#6CC18A; --bad:#F0735E; --line:#2F474C;
+  --good-bg:#1E3B2C; --bad-bg:#43262A;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.deva{font-family:var(--deva-serif)}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 20px 60px}
+[hidden]{display:none!important}
+
+/* Masthead: the name hangs from a shirorekha, like every Devanagari word */
+.mast{display:flex;align-items:flex-end;gap:22px;flex-wrap:wrap;margin-bottom:28px}
+.logo{position:relative;padding-top:10px;line-height:1}
+.logo::before{content:"";position:absolute;left:-6px;right:-6px;top:10px;height:9px;background:var(--accent);border-radius:1px}
+.logo span{font-family:var(--deva-serif);font-size:84px;display:block;position:relative;margin-top:-12px}
+.mast p{margin:0 0 12px;color:var(--muted);max-width:34ch}
+
+.grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--surface);border-radius:6px;padding:20px 22px;border-top:5px solid var(--ink)}
+.panel h2{font-size:20px;margin:0 0 12px;font-weight:700}
+.panel + .panel{margin-top:22px}
+
+.today{display:flex;gap:28px;flex-wrap:wrap;align-items:baseline;margin-bottom:16px}
+.today b{font-size:34px;font-weight:700;display:block;line-height:1.1}
+.today small{color:var(--muted);font-size:15px}
+.btn{border:0;border-radius:4px;padding:11px 20px;font-weight:700;font-size:17px;background:var(--sunk);color:var(--ink)}
+.btn:hover{filter:brightness(1.06)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.good{background:var(--good);color:var(--surface)}
+.btn.quiet{background:transparent;border:1.5px solid var(--line)}
+.btn.sel{outline:3px solid var(--ink);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+.small{font-size:15px}
+
+/* The path of units */
+.path{list-style:none;margin:0;padding:0}
+.unit{border-top:1px solid var(--line);padding:12px 0}
+.unit:first-child{border-top:0}
+.unit-head{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;width:100%;background:none;border:0;padding:0;text-align:left}
+.unit-glyph{font-family:var(--deva-serif);font-size:30px;line-height:1;text-align:center}
+.unit-title{font-weight:700}
+.unit-sub{font-size:14px;color:var(--muted)}
+.unit-state{font-size:14px;color:var(--muted);white-space:nowrap}
+.unit.locked .unit-glyph,.unit.locked .unit-title{opacity:.4}
+.bar{height:6px;background:var(--sunk);border-radius:3px;margin-top:6px;overflow:hidden;position:relative}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--line)}
+.bar i.l{background:var(--accent)}
+.bar i.m{background:var(--good)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0 60px}
+.chip{font-family:var(--deva-serif);font-size:22px;min-width:40px;padding:2px 8px;text-align:center;border-radius:4px;background:var(--sunk)}
+.chip.new{opacity:.45}
+.chip.m{box-shadow:inset 0 -3px 0 var(--good)}
+
+.pairs{list-style:none;margin:0;padding:0}
+.pairs li{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}
+.pairs li:first-child{border-top:0}
+.pair{font-family:var(--deva-serif);font-size:28px;line-height:1}
+.pair em{font-style:normal;font-family:var(--ui);font-size:15px;color:var(--muted);margin:0 8px}
+.links{display:flex;flex-direction:column;gap:8px}
+.links .btn{text-align:left}
+
+/* Study card */
+.studybar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.counts{display:flex;gap:16px;font-size:15px;color:var(--muted)}
+.counts b{color:var(--ink)}
+.card{background:var(--surface);border-radius:6px;max-width:720px;margin:0 auto;overflow:hidden}
+.card-rule{height:12px;background:var(--ink)}
+.card.ok .card-rule{background:var(--good)}
+.card.no .card-rule{background:var(--bad)}
+.card-body{padding:28px 28px 30px;text-align:center}
+.kind{font-size:14px;color:var(--muted);margin-bottom:6px}
+.glyph{font-family:var(--deva-serif);line-height:1.25;margin:4px 0 18px;word-break:keep-all;overflow-wrap:anywhere}
+.glyph.sans{font-family:var(--deva-sans)}
+.glyph.s1{font-size:clamp(96px,22vw,168px)}
+.glyph.s2{font-size:clamp(72px,16vw,120px)}
+.glyph.s3{font-size:clamp(50px,11vw,84px)}
+.glyph.s4{font-size:clamp(34px,7vw,52px)}
+.prompt-rom{font-size:clamp(44px,10vw,72px);font-weight:700;line-height:1.1;margin:10px 0 6px;letter-spacing:.01em}
+.hint{color:var(--muted);max-width:46ch;margin:0 auto 14px}
+.answer-row{display:flex;gap:10px;max-width:460px;margin:0 auto}
+.answer-row input{flex:1;min-width:0;font-size:24px;padding:10px 14px;border-radius:4px;border:2px solid var(--line);background:var(--bg);text-align:center}
+.answer-row input:focus{border-color:var(--accent);outline:none}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:460px;margin:8px auto 0}
+.opt{font-family:var(--deva-serif);font-size:54px;line-height:1.2;padding:12px 8px 8px;border-radius:6px;border:2px solid var(--line);background:var(--bg);position:relative}
+.opt kbd{position:absolute;left:8px;top:6px;font-family:var(--ui);font-size:13px;color:var(--muted)}
+.opt.right{border-color:var(--good);background:var(--good-bg)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.verdict{font-weight:700;font-size:20px;margin:16px 0 4px}
+.verdict.ok{color:var(--good)}
+.verdict.no{color:var(--bad)}
+.correct-rom{font-size:28px;font-weight:700}
+.meaning{color:var(--muted);margin-top:2px}
+.aks-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:16px 0 4px}
+.aks{background:var(--bg);border-radius:4px;padding:6px 10px 6px;min-width:62px;border-bottom:3px solid var(--line)}
+.aks .g{font-family:var(--deva-serif);font-size:32px;line-height:1.2;display:block}
+.aks .r{font-weight:700;display:block}
+.aks .p{font-size:13px;color:var(--muted);display:block;font-family:var(--deva-sans)}
+.aks.bad{border-bottom-color:var(--bad);background:var(--bad-bg)}
+.aks .y{font-size:13px;color:var(--bad);display:block}
+.space{width:10px}
+.mix{margin:10px auto 0;max-width:46ch;padding:10px 14px;border-radius:4px;background:var(--bad-bg)}
+.mix .deva{font-size:26px}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.keys{text-align:center;font-size:14px;color:var(--muted);margin-top:14px}
+.speak{border:0;background:var(--sunk);border-radius:50%;width:44px;height:44px;font-size:20px;vertical-align:middle;margin-left:6px}
+.intro-note{background:var(--bg);border-radius:4px;padding:12px 16px;text-align:left;max-width:52ch;margin:0 auto 6px}
+.intro-note p{margin:0 0 6px}
+.intro-note p:last-child{margin:0}
+.intro-note .deva{font-size:1.4em}
+.typed-as{font-size:15px;color:var(--muted)}
+.summary-list{list-style:none;padding:0;margin:14px 0 0;text-align:left}
+.summary-list li{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.summary-list .deva{font-size:26px}
+
+/* Writing pad */
+.slots{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+.slot{min-width:64px;height:76px;border-bottom:3px solid var(--line);font-family:var(--deva-serif);font-size:44px;line-height:76px;padding:0 6px;background:var(--bg);border-radius:4px 4px 0 0}
+.slot.sans,.tile.sans{font-family:var(--deva-sans)}
+.slot.good{border-bottom-color:var(--good)}
+.slot.bad{border-bottom-color:var(--bad);background:var(--bad-bg)}
+.tiles{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;max-width:560px;margin:0 auto}
+.tile{font-family:var(--deva-serif);font-size:38px;line-height:1.2;min-width:78px;padding:10px 12px 6px;border-radius:6px;border:2px solid var(--line);background:var(--surface);position:relative}
+.tile kbd{position:absolute;left:6px;top:3px;font-family:var(--ui);font-size:12px;color:var(--muted)}
+.tile:disabled{opacity:.25;cursor:default}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:820px){.grid.two{grid-template-columns:1fr}}
+.stats svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;font-size:14px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.stat-table{border-collapse:collapse;width:100%;font-size:15px}
+.stat-table th{text-align:left;font-weight:500;color:var(--muted);padding:4px 10px 4px 0}
+.stat-table td{padding:8px 10px 8px 0;border-top:1px solid var(--line);white-space:nowrap}
+.sh{font-size:16px;margin:14px 0 6px}
+.heatgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px;margin-bottom:6px}
+.heatgrid.five{grid-template-columns:repeat(5,minmax(56px,1fr))}
+.heat{border-radius:4px;padding:4px 2px 3px;text-align:center;border-bottom:4px solid var(--line);background:var(--bg)}
+.heat .deva{font-size:28px;display:block;line-height:1.3}
+.heat small{display:block;font-size:12px;font-weight:700}
+.heat.none{opacity:.55}
+.guide{padding-left:1.3em;margin:10px 0 0}
+.guide li{margin-bottom:6px}
+.padhost{display:flex;justify-content:center;margin:6px auto 0;max-width:380px;width:100%}
+.pad{touch-action:none;background:var(--bg);border-radius:6px;border:2px solid var(--line);display:block;cursor:crosshair;-webkit-user-select:none;user-select:none}
+.aks.tap{border-left:0;border-right:0;border-top:0;font:inherit;color:inherit;cursor:pointer}
+.aks.tap:hover{filter:brightness(1.05)}
+select{font:inherit;color:inherit}
+
+/* Reference */
+.ref h3{margin:22px 0 8px;font-size:18px}
+.ref-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px}
+.ref-cell{background:var(--bg);border:0;border-radius:4px;padding:8px 4px;text-align:center}
+.ref-cell .deva{font-size:34px;display:block;line-height:1.3}
+.ref-cell small{display:block;font-weight:700}
+.varga{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.wide{overflow-x:auto}
+
+dialog{border:0;border-radius:6px;background:var(--surface);color:var(--ink);max-width:560px;width:calc(100% - 32px);padding:22px 24px;border-top:5px solid var(--accent)}
+dialog::backdrop{background:rgba(10,20,22,.55)}
+dialog h2{margin:0 0 10px;font-size:20px}
+.set-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 0;border-top:1px solid var(--line)}
+.set-row label{flex:1}
+.set-row small{display:block;color:var(--muted)}
+table.typing{border-collapse:collapse;width:100%;font-size:15px}
+table.typing td{padding:5px 8px;border-top:1px solid var(--line)}
+table.typing td:first-child{font-family:var(--deva-serif);font-size:24px;width:70px}
+table.typing code{font-size:16px;font-weight:700;font-family:var(--ui)}
+.banner{background:var(--bad-bg);padding:10px 14px;border-radius:4px;margin-bottom:18px}
+@media (prefers-reduced-motion:no-preference){
+  .card.ok .card-rule,.card.no .card-rule{animation:grow .35s ease-out}
+  @keyframes grow{from{transform:scaleX(.2)}to{transform:scaleX(1)}}
+}
+@media (max-width:560px){
+  .wrap{padding:18px 14px 50px}
+  .card-body{padding:22px 16px 24px}
+  .logo span{font-size:66px}
+  .opt{font-size:44px}
+  .chips{margin-left:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="storage-warn" class="banner" hidden>This browser view can't save progress. Open <b>index.html</b> directly in Chrome, Firefox, Edge or Safari (or host it on GitHub Pages) so your reviews are kept.</div>
+  <main id="app"></main>
+</div>
+
+<dialog id="dlg"></dialog>
+
+<script>
+/*ENGINE-START*/
+'use strict';
+const NUK = '\u093C', HAL = '\u094D';
+
+/* ---------- Romanization scheme (ITRANS-style, case-sensitive for the tricky letters; IAST also accepted) ---------- */
+const VOW = {
+  a:['a'], aa:['aa','A','ā'], i:['i'], ii:['ii','I','ee','ī'], u:['u'], uu:['uu','U','oo','ū'],
+  Ri:['Ri','ṛ','RRi','R^i'], e:['e','ē'], ai:['ai'], o:['o','ō'], au:['au'], O:['O','ô','ŏ']
+};
+const VOWEL_LETTERS = {'अ':'a','आ':'aa','इ':'i','ई':'ii','उ':'u','ऊ':'uu','ऋ':'Ri','ए':'e','ऐ':'ai','ओ':'o','औ':'au','ऑ':'O'};
+const MATRA_V = {'ा':'aa','ि':'i','ी':'ii','ु':'u','ू':'uu','ृ':'Ri','े':'e','ै':'ai','ो':'o','ौ':'au','ॉ':'O','ॅ':'e'};
+const NASAL = {'ं':['M','n','m','ṃ','ṁ'], 'ँ':['~','M','n','m','ṃ','ṁ'], 'ः':['H','h','ḥ']};
+
+const VOWEL_INFO = [
+  ['अ','short “a”, like the a in about'],
+  ['आ','long “aa”, like the a in father'],
+  ['इ','short “i”, like bit'],
+  ['ई','long “ee”, like feet'],
+  ['उ','short “u”, like put'],
+  ['ऊ','long “oo”, like food'],
+  ['ए','“e/ay”, like café'],
+  ['ऐ','“ai”, close to the a in bat'],
+  ['ओ','“o”, like go'],
+  ['औ','“au”, like the aw in saw'],
+  ['ऋ','“ri”, mostly in Sanskrit words such as ऋषि (sage)']
+];
+const CONS_INFO = [
+  ['क',['k'],'k as in skip, no puff of air'],
+  ['ख',['kh'],'k with a strong puff of air'],
+  ['ग',['g'],'g as in go'],
+  ['घ',['gh'],'g with breath: g-h said together'],
+  ['ङ',['~N','ṅ','ng'],'ng as in sing (mostly inside conjuncts)'],
+  ['च',['ch','c'],'ch as in church, no puff'],
+  ['छ',['Ch','chh'],'ch with a strong puff of air'],
+  ['ज',['j'],'j as in jam'],
+  ['झ',['jh'],'j with breath'],
+  ['ञ',['~n','ñ','ny'],'ny as in canyon (mostly inside conjuncts)'],
+  ['ट',['T','ṭ'],'hard t: tongue curled back to the roof of the mouth'],
+  ['ठ',['Th','ṭh'],'hard t (ट) with a puff of air'],
+  ['ड',['D','ḍ'],'hard d: tongue curled back'],
+  ['ढ',['Dh','ḍh'],'hard d (ड) with breath'],
+  ['ण',['N','ṇ'],'n with the tongue curled back'],
+  ['त',['t'],'soft t: tongue touching the teeth'],
+  ['थ',['th'],'soft t with a puff of air (not the English “th”)'],
+  ['द',['d'],'soft d: tongue touching the teeth'],
+  ['ध',['dh'],'soft d with breath'],
+  ['न',['n'],'n as in no'],
+  ['प',['p'],'p as in spin, no puff'],
+  ['फ',['ph'],'p with a puff of air (often said like f)'],
+  ['ब',['b'],'b as in bat'],
+  ['भ',['bh'],'b with breath'],
+  ['म',['m'],'m as in man'],
+  ['य',['y'],'y as in yes'],
+  ['र',['r'],'a lightly tapped r'],
+  ['ल',['l'],'l as in love'],
+  ['व',['v','w'],'between v and w'],
+  ['श',['sh','ś'],'sh as in ship'],
+  ['ष',['Sh','ṣ'],'sh with the tongue curled back (in Hindi it sounds like श)'],
+  ['स',['s'],'s as in sun'],
+  ['ह',['h'],'h as in hat'],
+  ['क'+NUK,['q','ḳ'],'k from the back of the throat (Urdu and Arabic words)'],
+  ['ख'+NUK,['Kh','x','ḳh'],'like ch in Scottish “loch”'],
+  ['ग'+NUK,['G','ġ'],'a gargled g, like the French r'],
+  ['ज'+NUK,['z'],'z as in zoo'],
+  ['फ'+NUK,['f'],'f as in fan'],
+  ['ड'+NUK,['R','ṛ'],'a flapped r: tongue curls back and flicks forward'],
+  ['ढ'+NUK,['Rh','ṛh'],'the flapped ड़ with breath']
+];
+const CONS = {}; CONS_INFO.forEach(([c,r,h])=>CONS[c]={r,h});
+const VHINT = {}; VOWEL_INFO.forEach(([c,h])=>VHINT[c]=h);
+
+const MATRA_INFO = [
+  ['ा','a vertical bar after the letter'],
+  ['ि','written BEFORE the letter, but said AFTER it'],
+  ['ी','a hooked bar after the letter'],
+  ['ु','a small hook under the letter'],
+  ['ू','a hook under the letter that curls the other way'],
+  ['ृ','a small curl under the letter'],
+  ['े','one stroke above the letter'],
+  ['ै','two strokes above the letter'],
+  ['ो','a bar after the letter plus one stroke above'],
+  ['ौ','a bar after the letter plus two strokes above'],
+  ['ॉ','the open “o” of doctor or coffee, used for English words']
+];
+const MHINT = {}; MATRA_INFO.forEach(([m,h])=>MHINT[m]=h);
+
+/* Letters that learners typically mix up, by shape or by sound */
+const LOOK_PAIRS = [
+  ['ब','व'],['भ','म'],['घ','ध'],['थ','य'],['प','ष'],['प','फ'],['प','य'],['ड','ङ'],['ड','ड'+NUK],['ढ','ढ'+NUK],
+  ['ट','ठ'],['द','ढ'],['द','ड'],['त','न'],['क','फ'],['ख','र'],['म','स'],['ग','म'],['छ','ढ'],['ज','ज'+NUK],
+  ['ङ','ड'+NUK],['ल','न'],['भ','ऋ'],['श','स'],['श','ष'],['त','ट'],['थ','ठ'],['ध','ढ'],['न','ण'],['च','छ'],
+  ['ग','घ'],['ज','झ'],['क','ख'],['ब','भ'],['ङ','ञ'],['फ','फ'+NUK],['क','क'+NUK],['ग','ग'+NUK],['ख','ख'+NUK],
+  ['इ','ई'],['उ','ऊ'],['ए','ऐ'],['ओ','औ'],['अ','आ'],['इ','ड'],['ऊ','ऋ'],
+  ['ि','ी'],['ु','ू'],['े','ै'],['ो','ौ'],['ा','ो'],['ु','ृ'],['','ा'],['ो','ॉ']
+];
+function lookalikes(x){ const out=[]; LOOK_PAIRS.forEach(([a,b])=>{ if(a===x) out.push(b); else if(b===x) out.push(a); }); return out; }
+
+let LENIENT = false;
+function vopts(key){
+  const o = VOW[key].slice();
+  if (LENIENT){ if(key==='aa') o.push('a'); if(key==='ii') o.push('i'); if(key==='uu') o.push('u'); }
+  return o;
+}
+const isConsCode = cp => cp>=0x915 && cp<=0x939;
+
+function product(lists){
+  let acc=[''];
+  for (const l of lists){ const next=[]; for (const a of acc) for (const b of l) next.push(a+b); acc=next; }
+  return [...new Set(acc)];
+}
+
+/* Split Devanagari text into aksharas (written syllables); each akshara is a list of pieces with accepted spellings */
+function parse(text){
+  const s=[...text.normalize('NFD')];
+  const aks=[]; let i=0;
+  const markEnd=()=>{ if(aks.length) aks[aks.length-1].wordEnd=true; };
+  while(i<s.length){
+    const c=s[i]; const cp=c.codePointAt(0);
+    if (VOWEL_LETTERS[c]!==undefined){
+      const pieces=[{k:'v',ch:c,o:vopts(VOWEL_LETTERS[c])}]; let t=c; i++;
+      if (NASAL[s[i]]){ pieces.push({k:'n',ch:s[i],o:NASAL[s[i]]}); t+=s[i]; i++; }
+      aks.push({t,pieces}); continue;
+    }
+    if (isConsCode(cp)){
+      const pieces=[]; let t='';
+      for(;;){
+        let ch=s[i]; i++;
+        if (s[i]===NUK){ ch+=NUK; i++; }
+        t+=ch;
+        const info=CONS[ch]||CONS[ch[0]];
+        pieces.push({k:'c',ch,o:info.r});
+        if (s[i]===HAL){
+          t+=HAL; i++;
+          while(s[i]==='\u200D'||s[i]==='\u200C'){ t+=s[i]; i++; }
+          if (s[i] && isConsCode(s[i].codePointAt(0))) continue;
+          pieces.push({k:'m',ch:HAL,o:['']});
+          break;
+        }
+        if (MATRA_V[s[i]]!==undefined){ pieces.push({k:'m',ch:s[i],o:vopts(MATRA_V[s[i]])}); t+=s[i]; i++; break; }
+        pieces.push({k:'m',ch:'',o:['a',''],schwa:true});
+        break;
+      }
+      if (NASAL[s[i]]){ pieces.push({k:'n',ch:s[i],o:NASAL[s[i]]}); t+=s[i]; i++; }
+      mergeSpecial(pieces);
+      aks.push({t,pieces}); continue;
+    }
+    if (/[\s।॥?!,.;:"'()\-]/.test(c)){ markEnd(); i++; continue; }
+    i++;
+  }
+  markEnd();
+  applySchwaDeletion(aks);
+  aks.forEach((a,i)=>{ a.opts=product(a.pieces.map(p=>p.o)); a.rom=romOf(a,a.wordEnd?null:aks[i+1]); });
+  return aks;
+}
+function mergeSpecial(pieces){
+  for (let j=0;j<pieces.length-1;j++){
+    const a=pieces[j], b=pieces[j+1];
+    if (a.k!=='c'||b.k!=='c') continue;
+    if (a.ch==='क'&&b.ch==='ष'){ pieces.splice(j,2,{k:'c',ch:'क्ष',o:['kSh','ksh','kṣ','x'],special:true}); }
+    else if (a.ch==='ज'&&b.ch==='ञ'){ pieces.splice(j,2,{k:'c',ch:'ज्ञ',o:['gy','j~n','jñ','gny','dny'],special:true}); }
+  }
+}
+const schwaPiece = a => a.pieces.find(p=>p.schwa);
+const consCount = a => a.pieces.filter(p=>p.k==='c').length;
+function hasVowel(a){ const sp=schwaPiece(a); if(sp) return !sp.del; return !a.pieces.some(p=>p.ch===HAL); }
+/* Display only: approximate Hindi schwa deletion (कमल → kamal, देखना → dekhnaa). Answers accept both. */
+function applySchwaDeletion(aks){
+  let start=0;
+  for (let e=0;e<aks.length;e++){
+    if (!aks[e].wordEnd) continue;
+    const w=aks.slice(start,e+1); start=e+1;
+    const n=w.length;
+    for (let x=n-1;x>=0;x--){
+      const sp=schwaPiece(w[x]); if(!sp) continue;
+      sp.del=false;
+      if (n===1) continue;
+      const nasal=w[x].pieces.some(p=>p.k==='n');
+      if (x===n-1){ sp.del = consCount(w[x])<2 && !nasal; continue; }
+      if (x===0) continue;
+      if (consCount(w[x])===1 && !nasal && hasVowel(w[x-1]) && hasVowel(w[x+1])) sp.del=true;
+    }
+  }
+}
+function romOf(a,next){
+  const labial = next && /^[पफबभम]/.test(next.t);
+  return a.pieces.map(p=> p.schwa ? (p.del?'':'a') : p.k==='n' && p.ch!=='ः' ? (labial&&p.ch==='ं'?'m':'n') : p.o[0]).join('');
+}
+function romanize(text){
+  const aks=parse(text); let out=''; aks.forEach(a=>{ out+=a.rom; if(a.wordEnd) out+=' '; }); return out.trim();
+}
+function partsOf(a){
+  const cs=a.pieces.filter(p=>p.k==='c');
+  const out=[];
+  a.pieces.forEach(p=>{
+    if (p.k==='c'){ out.push(p===cs[cs.length-1] && !a.pieces.some(q=>q.ch===HAL) ? p.ch : p.ch+HAL); }
+    else if (p.k==='v') out.push(p.ch);
+    else if (p.k==='m' && p.ch && p.ch!==HAL) out.push('◌'+p.ch);
+    else if (p.k==='n') out.push('◌'+p.ch);
+  });
+  return out;
+}
+function normAnswer(s){ return s.normalize('NFC').replace(/[\s\-_'’`.,!?।]/g,''); }
+
+/* Check a typed reading. Finds the smallest stretch of aksharas that explains the mistake. */
+function check(aks, raw){
+  const s=normAnswer(raw), n=aks.length, L=s.length;
+  const F=[new Set([0])];
+  for (let k=0;k<n;k++){ const nx=new Set(); for(const p of F[k]) for(const o of aks[k].opts) if(s.startsWith(o,p)) nx.add(p+o.length); F.push(nx); }
+  const B=new Array(n+1); B[n]=new Set([L]);
+  for (let k=n-1;k>=0;k--){ const st=new Set(); for(let p=0;p<=L;p++) for(const o of aks[k].opts) if(s.startsWith(o,p)&&B[k+1].has(p+o.length)){ st.add(p); break; } B[k]=st; }
+  if (B[0].has(0)) return {ok:true, s};
+  let best=null;
+  for (let k=0;k<=n;k++) for (const p of F[k]) for (let j=k;j<=n;j++) for (const q of B[j]){
+    if (q<p) continue;
+    const cost=Math.max(j-k,1)*100 + Math.abs((q-p)-(j-k)*2);
+    if (!best||cost<best.cost) best={cost,from:k,to:j,typed:s.slice(p,q)};
+  }
+  return {ok:false, s, from:best.from, to:best.to, typed:best.typed};
+}
+const CONS_KEYS = Object.keys(CONS);
+const VOWEL_KEYS = Object.keys(VOWEL_LETTERS);
+const MATRA_KEYS = ['','ा','ि','ी','ु','ू','ृ','े','ै','ो','ौ','ॉ'];
+/* Which single letter or vowel sign did the reader swap? e.g. typed “bh” for म → म was read as भ */
+function explain(ak, typed){
+  for (let pi=0;pi<ak.pieces.length;pi++){
+    const p=ak.pieces[pi];
+    if (p.special||p.k==='n'||p.ch===HAL) continue;
+    const pool = p.k==='c'?CONS_KEYS : p.k==='v'?VOWEL_KEYS : MATRA_KEYS;
+    for (const x of pool){
+      if (x===p.ch) continue;
+      const alt = p.k==='c'?CONS[x].r : p.k==='v'?vopts(VOWEL_LETTERS[x]) : (x===''?['a','']:vopts(MATRA_V[x]));
+      const combos=product(ak.pieces.map((q,qi)=>qi===pi?alt:q.o));
+      if (combos.includes(typed)) return {a:p.ch, b:x, k:p.k==='v'?'v':p.k};
+    }
+  }
+  return null;
+}
+
+/* ---------- Pseudo-words: impossible to guess from vocabulary, so they prove real reading ---------- */
+function rngFrom(seed){ let a=seed>>>0; return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+const PSEUDO_CONS = ['क','ख','ग','घ','च','छ','ज','झ','ट','ठ','ड','ढ','त','थ','द','ध','न','प','फ','ब','भ','म','य','र','ल','व','श','ष','स','ह',
+  'ब','व','भ','म','घ','ध','थ','य','प','ष','ड','ढ','ट','ठ','द','ख','छ','ड'+NUK];
+const PSEUDO_CLUSTERS = ['स्त','न्द','क्य','प्र','श्र','त्र','द्ध','ष्ट','म्ब','क्ष','त्त','ल्ल','ध्य','स्व','र्म','द्व','ब्द','च्च','ग्र','ह्म'];
+const PSEUDO_V = ['','','','ा','ा','ि','ी','ु','ू','े','ै','ो','ौ'];
+function makePseudo(rng){
+  const len=2+Math.floor(rng()*3); let w='';
+  for (let i=0;i<len;i++){
+    if (i===0 && rng()<0.12){ w+=['अ','आ','इ','ई','उ','ऊ','ए','ऐ','ओ','औ'][Math.floor(rng()*10)]; continue; }
+    const c = (i>0 && rng()<0.22) ? PSEUDO_CLUSTERS[Math.floor(rng()*PSEUDO_CLUSTERS.length)] : PSEUDO_CONS[Math.floor(rng()*PSEUDO_CONS.length)];
+    w+=c+PSEUDO_V[Math.floor(rng()*PSEUDO_V.length)];
+    if (rng()<0.07) w+='ं';
+  }
+  return w;
+}
+/*ENGINE-END*/
+
+/* ---------- Curriculum ---------- */
+const W1 = [['घर','house'],['कल','yesterday / tomorrow'],['जल','water'],['नल','tap'],['फल','fruit'],['पल','moment'],['मन','mind'],['धन','wealth'],['वन','forest'],['हम','we'],['सब','all'],['अब','now'],['तब','then'],['जब','when'],['कब','when?'],['बस','enough / bus'],['दस','ten'],['नमक','salt'],['कमल','lotus'],['कलम','pen'],['गरम','hot'],['नरम','soft'],['अगर','if'],['मगर','but'],['असर','effect'],['महल','palace'],['शहर','city'],['सड़क','road'],['जगह','place'],['मदद','help'],['लगभग','almost'],['उधर','over there'],['इधर','over here'],['ऊपर','up'],['एक','one'],['और','and'],['अमर','immortal'],['आम','mango'],['थक','tire (verb stem)'],['छत','roof'],['ठग','swindler'],['ढक','cover (verb stem)'],['झट','instantly'],['खत','letter (mail)'],['भवन','building'],['बदन','body']];
+const W2 = [['पानी','water'],['दादी','grandmother'],['माता','mother'],['पिता','father'],['बेटा','son'],['बेटी','daughter'],['किताब','book'],['दिन','day'],['रात','night'],['सुबह','morning'],['शाम','evening'],['खाना','food / to eat'],['दूध','milk'],['चाय','tea'],['चीनी','sugar'],['रोटी','flatbread'],['सेब','apple'],['केला','banana'],['आलू','potato'],['मेज़','table'],['दरवाज़ा','door'],['खिड़की','window'],['घोड़ा','horse'],['गाय','cow'],['हाथी','elephant'],['मोर','peacock'],['तोता','parrot'],['मछली','fish'],['नीला','blue'],['पीला','yellow'],['लाल','red'],['काला','black'],['सफ़ेद','white'],['हरा','green'],['भूख','hunger'],['सोना','to sleep / gold'],['जाना','to go'],['आना','to come'],['देखना','to see'],['बोलना','to speak'],['सुनना','to listen'],['लिखना','to write'],['पढ़ना','to read'],['समझना','to understand'],['भारत','India'],['दुकान','shop'],['बाज़ार','market'],['मौसम','weather'],['बारिश','rain'],['धूप','sunshine'],['झील','lake'],['नीचे','below'],['ऐसा','like this'],['औरत','woman'],['आदमी','man'],['ईमानदार','honest'],['इमारत','building'],['ऋषि','sage'],['लड़का','boy'],['लड़की','girl'],['हिंदी','Hindi'],['ठंडा','cold'],['मैं','I'],['हैं','are'],['नहीं','no / not'],['यहाँ','here'],['वहाँ','there'],['कहाँ','where'],['माँ','mom'],['आँख','eye'],['चाँद','moon'],['गाँव','village'],['कॉफ़ी','coffee'],['भाई','brother'],['बहन','sister'],['घड़ी','watch / clock'],['ढोल','drum'],['थाली','plate'],['पैसा','money'],['बूढ़ा','old (person)']];
+const W3 = [['क्या','what'],['प्यार','love'],['प्यास','thirst'],['अच्छा','good'],['बच्चा','child'],['कुत्ता','dog'],['बिल्ली','cat'],['कुर्सी','chair'],['स्कूल','school'],['दोस्त','friend'],['नमस्ते','hello'],['धन्यवाद','thank you'],['ज़्यादा','more'],['ग्यारह','eleven'],['स्वाद','taste'],['ट्रेन','train'],['प्रेम','love'],['मित्र','friend'],['पत्र','letter'],['छात्र','student'],['क्षमा','forgiveness'],['ज्ञान','knowledge'],['विद्या','learning'],['शुद्ध','pure'],['युद्ध','war'],['बुद्धि','intelligence'],['द्वार','gate'],['पक्का','certain'],['मुश्किल','difficult'],['हफ़्ता','week'],['रास्ता','road, way'],['सस्ता','cheap'],['शब्द','word'],['ध्यान','attention'],['कर्म','action, deed'],['धर्म','religion, duty'],['सूर्य','sun'],['पर्वत','mountain'],['गर्मी','heat, summer'],['सर्दी','winter, a cold'],['उम्मीद','hope'],['अंग्रेज़ी','English'],['डॉक्टर','doctor'],['कृष्ण','Krishna'],['राष्ट्र','nation'],['पुस्तक','book'],['ग्रह','planet'],['क्रिकेट','cricket'],['ड्राइवर','driver'],['चिह्न','sign, symbol'],['ब्राह्मण','Brahmin'],['दिल्ली','Delhi']];
+const W4 = [['विद्यार्थी','student'],['प्रधानमंत्री','prime minister'],['स्वतंत्रता','independence'],['अंतरराष्ट्रीय','international'],['विश्वविद्यालय','university'],['प्रयोगशाला','laboratory'],['अस्पताल','hospital'],['प्रतियोगिता','competition'],['व्यक्तित्व','personality'],['महत्वपूर्ण','important'],['ज़िम्मेदारी','responsibility'],['परिस्थिति','situation'],['प्राकृतिक','natural'],['संस्कृति','culture'],['आत्मविश्वास','self-confidence'],['स्वास्थ्य','health'],['राष्ट्रपति','president'],['कृपया','please'],['अर्थव्यवस्था','economy'],['वैज्ञानिक','scientist'],['ऐतिहासिक','historical'],['समाचार','news'],['दृष्टिकोण','point of view'],['सुरक्षित','safe'],['प्रतिष्ठा','prestige'],['दक्षिण','south'],['पश्चिम','west'],['पूर्व','east'],['उत्तर','north'],['संविधान','constitution'],['लोकतंत्र','democracy'],['प्रश्न','question'],['आवश्यकता','necessity'],['प्रसिद्ध','famous'],['अद्भुत','amazing'],['स्त्री','woman'],['श्रद्धांजलि','tribute'],['उद्देश्य','purpose']];
+const S1 = [['मेरा नाम राहुल है।','My name is Rahul.'],['आप कैसे हैं?','How are you?'],['मैं ठीक हूँ।','I am fine.'],['मुझे हिंदी पसंद है।','I like Hindi.'],['यह किताब बहुत अच्छी है।','This book is very good.'],['मैं पानी पीना चाहता हूँ।','I want to drink water.'],['आज मौसम अच्छा है।','The weather is nice today.'],['वह स्कूल जाती है।','She goes to school.'],['हम कल दिल्ली जाएँगे।','We will go to Delhi tomorrow.'],['क्या आप मेरी मदद करेंगे?','Will you help me?'],['मुझे भूख लगी है।','I am hungry.'],['बाज़ार कहाँ है?','Where is the market?'],['धीरे धीरे बोलिए।','Please speak slowly.'],['मुझे समझ नहीं आया।','I did not understand.'],['ट्रेन कितने बजे आएगी?','What time will the train come?']];
+
+const UNITS=[]; const CARD={}; const ORDER=[];
+function addUnit(u){ u.cards=[]; UNITS.push(u); return u; }
+function addCard(u,c){
+  c.unit=u.id; c.id=(c.type==='pick'?'p:':'r:')+c.text;
+  if (CARD[c.id]) return; CARD[c.id]=c; u.cards.push(c.id); ORDER.push(c.id);
+}
+function letterUnit(id,title,sub,chars){
+  const u=addUnit({id,title,sub,glyph:chars[0],chips:true});
+  chars.forEach(ch=>{ addCard(u,{type:'read',text:ch,kind:'letter',intro:{kind:'letter',ch}}); });
+  chars.forEach(ch=>{ addCard(u,{type:'pick',text:ch,kind:'letter'}); });
+  return u;
+}
+letterUnit('v1','Vowels I','Short and long pairs',['अ','आ','इ','ई','उ','ऊ']);
+letterUnit('v2','Vowels II','e, ai, o, au and ri',['ए','ऐ','ओ','औ','ऋ']);
+letterUnit('c1','The क group','Sounds from the throat',['क','ख','ग','घ','ङ']);
+letterUnit('c2','The च group','Sounds from the palate',['च','छ','ज','झ','ञ']);
+letterUnit('c3','The ट group','Tongue curled back',['ट','ठ','ड','ढ','ण']);
+letterUnit('c4','The त group','Tongue on the teeth',['त','थ','द','ध','न']);
+letterUnit('c5','The प group','Sounds from the lips',['प','फ','ब','भ','म']);
+letterUnit('c6','य र ल व','The in-between sounds',['य','र','ल','व']);
+letterUnit('c7','श ष स ह','Hissing sounds and h',['श','ष','स','ह']);
+letterUnit('c8','Dotted letters','Letters with a nukta dot',['क'+NUK,'ख'+NUK,'ग'+NUK,'ज'+NUK,'फ'+NUK,'ड'+NUK,'ढ'+NUK]);
+function matraUnit(id,title,sub,spec,extra){
+  const u=addUnit({id,title,sub,glyph:'क'+spec[0][0],chips:true});
+  spec.forEach(([m,cons])=>{
+    cons.forEach((c,i)=> addCard(u,{type:'read',text:c+m,kind:'syll',intro: i===0?{kind:'matra',m,ex:c+m}:null}));
+  });
+  (extra||[]).forEach(e=>addCard(u,e));
+  spec.forEach(([m,cons])=>{ addCard(u,{type:'pick',text:cons[1]+m,kind:'syll'}); addCard(u,{type:'pick',text:cons[3]+m,kind:'syll'}); });
+  return u;
+}
+matraUnit('m1','Vowel signs ा ि ी','How vowels attach to letters',[['ा',['क','म','भ','ब','व']],['ि',['ग','घ','ध','थ','य']],['ी',['प','ष','फ','न','त']]]);
+matraUnit('m2','Vowel signs ु ू ृ','Signs that hang below',[['ु',['द','ड','ट','ठ','ल']],['ू',['ज','झ','स','ह','च']],['ृ',['क','म','द','ग','ह']]],
+  [{type:'read',text:'रु',kind:'syll',intro:{kind:'custom',glyph:'रु  रू',title:'र changes shape',body:'र joins ु and ू in a special way: रु is “ru”, रू is “ruu”. Look at the shape beside र, not under it.'}},{type:'read',text:'रू',kind:'syll'}]);
+matraUnit('m3','Vowel signs े ै ो ौ','Signs that sit on top',[['े',['ब','व','भ','म','न']],['ै',['छ','ज','ल','प','क']],['ो',['घ','ध','त','ट','ड']],['ौ',['स','श','ग','द','र']]]);
+(function(){
+  const u=addUnit({id:'m4',title:'Nasals, ः and ॉ',sub:'Dots, moons and the English o',glyph:'माँ',chips:true});
+  const L=[
+    ['अं',{kind:'custom',glyph:'◌ं',title:'Anusvara: a dot on top',body:'A dot above adds an n or m sound: अं = “aM” (type M, n or m). हिंदी = hindii.'}],
+    ['कं',null],['सं',null],
+    ['माँ',{kind:'custom',glyph:'◌ँ',title:'Chandrabindu: moon and dot',body:'The moon with a dot makes the vowel nasal, like French “bon”: माँ = “maa~” (type ~, M or n).'}],
+    ['हँ',null],['हैं',null],['मैं',null],
+    ['अः',{kind:'custom',glyph:'◌ः',title:'Visarga: two dots',body:'Two dots after a letter add a soft breath: अः = “aH” (type H or h). You will see it in words like दुःख (sorrow).'}],
+    ['दुः',null],
+    ['ऑ',{kind:'custom',glyph:'ऑ  ◌ॉ',title:'The English “o”',body:'A moon on top of ा or आ gives the open “o” in doctor or coffee: ऑ, डॉ. Type O (capital).'}],
+    ['डॉ',null],['कॉ',null]
+  ];
+  L.forEach(([t,intro])=>addCard(u,{type:'read',text:t,kind:'syll',intro}));
+})();
+function wordUnit(id,title,sub,list,kind,intro){
+  const u=addUnit({id,title,sub,glyph:list[0][0],intro});
+  list.forEach(([t,m])=>addCard(u,{type:'read',text:t,kind:kind||'word',meaning:m}));
+  return u;
+}
+function conjUnit(id,title,sub,list,intro){
+  const u=addUnit({id,title,sub,glyph:list[0],chips:true,intro});
+  list.forEach(t=>addCard(u,{type:'read',text:t,kind:'conj'}));
+  return u;
+}
+wordUnit('w1','First words','Only letters, no vowel signs',W1,'word',{title:'Reading whole words',body:'From here on there is no introduction: you read each word cold. Every consonant carries a built-in “a”, which is often silent at the end of a word, so कमल is “kamal” (kamala is also accepted).'});
+wordUnit('w2','Everyday words','Vowel signs and nasals',W2);
+conjUnit('k1','Half letters','Consonants with no vowel between them',['क्य','प्य','ध्य','ज्य','स्त','स्थ','स्क','स्व','न्द','न्त','म्ब','च्च','त्त','ल्ल','श्व'],
+  {title:'Conjuncts: half letters',body:'When two consonants meet with no vowel between them, the first one loses its vertical stroke and becomes a half letter: क् + य = क्य (kya). Read the half letter first.'});
+conjUnit('k2','Forms of र','The r that changes shape',['प्र','क्र','ग्र','ब्र','द्र','ट्र','ड्र','श्र','त्र','र्म','र्क','र्य','र्ग','र्त'],
+  {title:'र has three disguises',body:'After a consonant, र becomes a small slanted stroke at the foot: प्र = pr. Under ट and ड it becomes a caret: ट्र = Tr. Before a consonant it rides on top as a small hook: र्म = rm (read the hook FIRST, even though it is written last). श्र = shr and त्र = tr have their own shapes.'});
+conjUnit('k3','Special conjuncts','Shapes that hide their parts',['क्ष','ज्ञ','द्ध','द्य','द्व','द्म','ह्म','ह्य','ह्न','क्त','ष्ट','ष्ठ','ट्ट','ङ्ग','ञ्च'],
+  {title:'Conjuncts that look new',body:'Some pairs merge into shapes that hide their parts: क्ष = k+Sh (kSh), ज्ञ = j+~n (said “gy” in Hindi), द्ध = d+dh, द्य = d+y, द्व = d+v, ह्म = h+m. Font styles differ a lot here, so the app will sometimes switch typefaces.'});
+wordUnit('w3','Words with conjuncts','Half letters inside real words',W3);
+(function(){
+  const u=addUnit({id:'p1',title:'Tricky pseudo-words',sub:'Nonsense words built from look-alikes',glyph:'भघ',intro:{title:'Words you cannot guess',body:'These are not real words. They are built from the letters people mix up most, so the only way to get them right is to read every letter. If you pass these, you are really reading.'}});
+  const rng=rngFrom(20260926); const real=new Set([...W1,...W2,...W3,...W4].map(x=>x[0])); let n=0;
+  while(n<40){ const w=makePseudo(rng); if(real.has(w)||CARD['r:'+w]) continue; addCard(u,{type:'read',text:w,kind:'pseudo'}); n++; }
+})();
+wordUnit('w4','Long words','Several conjuncts in a row',W4);
+wordUnit('s1','Short sentences','Reading at full length',S1,'phrase');
+const UNIT_BY_ID={}; UNITS.forEach(u=>UNIT_BY_ID[u.id]=u);
+const ALL_WORDS=[...W1,...W2,...W3,...W4];
+
+/* ---------- State and storage ---------- */
+const KEY='akshar-devanagari-v1';
+let STORAGE_OK=true;
+function defaults(){ return {v:1,cards:{},wcards:{},dcards:{},newDay:{d:'',n:0},wNewDay:{d:'',n:0},dNewDay:{d:'',n:0},log:{},conf:{},lstat:{},seenIntro:{},set:{perDay:25,wPerDay:10,dPerDay:10,answer:'flip',lenient:false,audio:true,unlockAll:false,fonts:true}}; }
+function load(){
+  try{ const raw=localStorage.getItem(KEY); if(!raw) return defaults(); const s=JSON.parse(raw); const d=defaults(); return Object.assign(d,s,{set:Object.assign(d.set,s.set||{})}); }
+  catch(e){ STORAGE_OK=false; return defaults(); }
+}
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){ STORAGE_OK=false; }
+  document.getElementById('storage-warn').hidden=STORAGE_OK;
+}
+let S=load(); LENIENT=S.set.lenient;
+
+const MIN=60e3, DAY=864e5, STEPS=[1,10];
+const dayKey=(t=Date.now())=>{ const d=new Date(t); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+function newToday(){ if(S.newDay.d!==dayKey()) S.newDay={d:dayKey(),n:0}; return S.newDay.n; }
+const isLearned = c => c && (c.s==='review' || (c.s==='learn' && c.rl));
+const isMature = c => c && c.s==='review' && c.ivl>=21;
+
+function newTodayW(){ if(S.wNewDay.d!==dayKey()) S.wNewDay={d:dayKey(),n:0}; return S.wNewDay.n; }
+function introduce(id, delay, store){
+  store=store||S.cards;
+  store[id]={s:'learn',step:0,due:Date.now()+(delay||0),ivl:0,ease:2.5,reps:0,lapses:0,rl:false};
+  if (store===S.wcards){ newTodayW(); S.wNewDay.n++; } else if (store===S.dcards){ newTodayD(); S.dNewDay.n++; } else { newToday(); S.newDay.n++; }
+}
+function newTodayD(){ if(S.dNewDay.d!==dayKey()) S.dNewDay={d:dayKey(),n:0}; return S.dNewDay.n; }
+/* Daily log: answers, right answers, reviews of graduated cards (for retention), time to answer on reading cards, and a count per deck */
+function logAnswer(ok,x){
+  x=x||{}; const k=dayKey(); const l=S.log[k]||(S.log[k]={n:0,ok:0}); l.n++; if(ok) l.ok++;
+  if (x.review){ l.r=(l.r||0)+1; if(ok) l.rok=(l.rok||0)+1; }
+  if (x.ms && x.ms<60000){ l.ms=(l.ms||0)+x.ms; l.msn=(l.msn||0)+1; }
+  if (x.deck){ l.dk=l.dk||{}; l.dk[x.deck]=(l.dk[x.deck]||0)+1; }
+}
+/* Per-letter accuracy: every letter and vowel sign in a card counts, and only the misread syllables count as wrong */
+function letterKeys(a){ return a.pieces.filter(p=>(p.k==='c'&&!p.special)||p.k==='v'||(p.k==='m'&&p.ch&&p.ch!==HAL)).map(p=>p.ch); }
+function trackLetters(aks, ok, wrong){
+  if (!aks) return;
+  if (!ok && (!wrong||!wrong.size)) return;
+  aks.forEach((a,i)=>{ const bad=!ok&&wrong.has(i); letterKeys(a).forEach(k=>{ const e=S.lstat[k]||(S.lstat[k]={n:0,ok:0}); e.n++; if(!bad) e.ok++; }); });
+}
+/* grade: 0 again, 1 hard, 2 good, 3 easy */
+function schedule(id, grade, store){
+  const c=(store||S.cards)[id], now=Date.now(); c.reps++; const wasReview=c.s==='review';
+  const fuzz=()=>0.95+Math.random()*0.1;
+  if (c.s==='learn'){
+    if (grade===0){ c.step=0; c.due=now+STEPS[0]*MIN; }
+    else if (grade===1){ c.due=now+STEPS[Math.min(c.step,STEPS.length-1)]*1.5*MIN; }
+    else if (grade===3 || c.step+1>=STEPS.length){
+      const base = c.rl ? Math.max(1,c.ivl) : (grade===3?4:1);
+      c.s='review'; c.rl=false; c.ivl=base; c.due=now+c.ivl*DAY;
+    } else { c.step++; c.due=now+STEPS[c.step]*MIN; }
+  } else {
+    if (grade===0){ c.lapses++; c.ease=Math.max(1.3,c.ease-0.2); c.ivl=Math.max(1,Math.round(c.ivl*0.4)); c.s='learn'; c.rl=true; c.step=0; c.due=now+STEPS[0]*MIN; }
+    else {
+      if (grade===1){ c.ivl=Math.max(c.ivl+1,c.ivl*1.2); c.ease=Math.max(1.3,c.ease-0.15); }
+      else if (grade===2){ c.ivl=Math.max(c.ivl+1,c.ivl*c.ease); }
+      else { c.ivl=Math.max(c.ivl+2,c.ivl*c.ease*1.3); c.ease+=0.15; }
+      c.ivl=Math.max(1,Math.round(c.ivl*fuzz())); c.due=now+c.ivl*DAY;
+    }
+  }
+  const deck = store===S.wcards?'w' : store===S.dcards?'d' : 'r';
+  logAnswer(grade>0,{review:wasReview,deck,ms: deck==='r'&&cur&&cur.mode==='read'?cur.ms:null}); save();
+}
+function recordConfusion(a,b,k){
+  if (a===b) return;
+  const key=[a,b].sort().join('|');
+  const e=S.conf[key]||(S.conf[key]={n:0,k});
+  e.n++; e.last=Date.now();
+}
+function confusedWith(x){
+  const out=[]; Object.entries(S.conf).sort((p,q)=>q[1].n-p[1].n).forEach(([key])=>{ const [a,b]=key.split('|'); if(a===x) out.push(b); else if(b===x) out.push(a); });
+  return out;
+}
+
+function unitProgress(u){
+  let intro=0,learned=0,mature=0;
+  u.cards.forEach(id=>{ const c=S.cards[id]; if(c){ intro++; if(isLearned(c)) learned++; if(isMature(c)) mature++; } });
+  return {total:u.cards.length,intro,learned,mature};
+}
+function unitUnlocked(i){
+  if (i===0||S.set.unlockAll) return true;
+  const p=unitProgress(UNITS[i-1]);
+  return unitUnlocked(i-1) && p.intro===p.total && p.learned>=Math.ceil(p.total*0.8);
+}
+function nextNewCard(){
+  if (newToday()>=S.set.perDay) return null;
+  for (let i=0;i<UNITS.length;i++){
+    if (!unitUnlocked(i)) return null;
+    for (const id of UNITS[i].cards){
+      if (S.cards[id]) continue;
+      const c=CARD[id];
+      if (c.type==='pick' && !isLearned(S.cards['r:'+c.text])) continue;
+      return id;
+    }
+  }
+  return null;
+}
+function newAvailable(){
+  let n=0; const left=S.set.perDay-newToday(); if(left<=0) return 0;
+  for (let i=0;i<UNITS.length&&n<left;i++){ if(!unitUnlocked(i)) break; UNITS[i].cards.forEach(id=>{ if(!S.cards[id]&&n<left) n++; }); }
+  return n;
+}
+/* Writing cards: one per letter plus the vowel signs on क. Each unlocks once you can read it. */
+const WRITE_ITEMS=[...VOWEL_INFO.map(v=>v[0]),...CONS_INFO.map(c=>c[0]),...MATRA_KEYS.slice(1).map(m=>'क'+m)];
+function writeUnlocked(t){
+  const a=parse(t)[0]; const m=a.pieces.find(p=>p.k==='m'&&p.ch&&p.ch!==HAL);
+  if (!m) return isLearned(S.cards['r:'+t]);
+  return ORDER.some(id=>CARD[id].type==='read'&&CARD[id].kind==='syll'&&CARD[id].text.endsWith(m.ch)&&isLearned(S.cards[id]));
+}
+function nextNewWrite(){
+  if (newTodayW()>=S.set.wPerDay) return null;
+  for (const t of WRITE_ITEMS){ if(!S.wcards['w:'+t] && writeUnlocked(t)) return 'w:'+t; }
+  return null;
+}
+function newAvailW(){ const left=S.set.wPerDay-newTodayW(); if(left<=0) return 0; let n=0; for(const t of WRITE_ITEMS){ if(n>=left) break; if(!S.wcards['w:'+t]&&writeUnlocked(t)) n++; } return n; }
+function dueCountW(){ const now=Date.now(); return Object.values(S.wcards).filter(c=>c.due<=now).length; }
+function dueCount(){ const now=Date.now(); return Object.values(S.cards).filter(c=>c.due<=now).length; }
+function streak(){ let d=new Date(); let n=0; if(!S.log[dayKey(d)]) d.setDate(d.getDate()-1); while(S.log[dayKey(d)]){ n++; d.setDate(d.getDate()-1); } return n; }
+function nextDueTime(store){ let t=Infinity; Object.values(store||S.cards).forEach(c=>{ if(c.due<t) t=c.due; }); return t; }
+
+/* ---------- Audio (uses a Hindi system voice if one exists) ---------- */
+let HI_VOICE=null;
+function findVoice(){ try{ const vs=speechSynthesis.getVoices(); HI_VOICE=vs.find(v=>/^hi/i.test(v.lang))||null; }catch(e){ HI_VOICE=null; } }
+if ('speechSynthesis' in window){ findVoice(); speechSynthesis.onvoiceschanged=()=>{ findVoice(); if(view==='home') renderHome(); }; }
+function speak(t){ if(!HI_VOICE) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(t.replace(/◌/g,'')); u.voice=HI_VOICE; u.lang=HI_VOICE.lang; u.rate=0.8; speechSynthesis.speak(u); }catch(e){} }
+const speakBtn = t => HI_VOICE ? `<button class="speak" data-speak="${esc(t)}" aria-label="Play sound">🔊</button>` : '';
+
+/* ---------- Rendering helpers ---------- */
+const $=s=>document.querySelector(s);
+const app=$('#app');
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const optList = o => o.map(x=>`<b>${esc(x)}</b>`).join(' or ');
+function sizeClass(text,aks){ if(/\s/.test(text.trim())) return 's4'; const n=aks.length; return n<=1?'s1':n<=3?'s2':n<=7?'s3':'s4'; }
+const matraLabel = m => m==='' ? 'no sign (inherent a)' : '◌'+m;
+function pieceLabel(x){ return x==='' ? '—' : (MATRA_V[x]!==undefined ? '◌'+x : x); }
+function pieceRom(x,k){
+  if (k==='c') return CONS[x]?CONS[x].r[0]:'';
+  if (k==='v') return VOW[VOWEL_LETTERS[x]][0];
+  return x==='' ? 'a' : VOW[MATRA_V[x]][0];
+}
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+let view='home';
+let sess=null;   // current session
+let cur=null;    // current card being shown
+
+/* ---------- Home ---------- */
+function renderHome(){
+  view='home'; LENIENT=S.set.lenient;
+  const due=dueCount(), nw=newAvailable(), st=streak();
+  const reviewsTotal=Object.values(S.log).reduce((a,l)=>a+l.n,0);
+  let startLabel, canStudy = due>0 || nw>0;
+  if (canStudy) startLabel = due&&nw ? `Study ${due} due and ${nw} new` : due ? `Review ${due} due` : `Learn ${nw} new`;
+  const nd=nextDueTime();
+  const allDone = !canStudy;
+  const nextTxt = nd<Infinity ? `Next review ${fmtWhen(nd)}.` : '';
+  const pairs=Object.entries(S.conf).sort((a,b)=>b[1].n-a[1].n).slice(0,6);
+  let lockedSeen=false;
+  app.innerHTML=`
+  <header class="mast">
+    <div class="logo"><span>अक्षर</span></div>
+    <p>Learn to read Devanagari letter by letter, then prove it on words you cannot guess.</p>
+  </header>
+  <div class="grid">
+    <div>
+      <section class="panel">
+        <h2>Today</h2>
+        <div class="today">
+          <div><b>${due}</b><small>due now</small></div>
+          <div><b>${nw}</b><small>new available</small></div>
+          <div><b>${st}</b><small>day streak</small></div>
+          <div><b>${reviewsTotal}</b><small>answers so far</small></div>
+        </div>
+        ${canStudy ? `<button class="btn primary" id="go">${startLabel}</button>`
+          : `<p class="muted" style="margin:0 0 12px">You're done for now. ${nextTxt} ${newToday()>=S.set.perDay?'New cards are capped for today; change the limit in settings.':''}</p>
+             <div class="row"><button class="btn primary" id="test">Take the reading test</button></div>`}
+      </section>
+      <section class="panel">
+        <h2>Your path</h2>
+        <ol class="path">
+          ${UNITS.map((u,i)=>{
+            const p=unitProgress(u), un=unitUnlocked(i);
+            let state;
+            if(!un){ state = lockedSeen ? 'Locked' : 'Unlocks at 80% of the previous step'; lockedSeen=true; }
+            else if(p.intro===0) state='Ready';
+            else if(p.learned===p.total) state = p.mature===p.total ? 'Mastered' : 'Learned';
+            else state=`${p.learned} of ${p.total} learned`;
+            const w=x=>(x/p.total*100).toFixed(1)+'%';
+            return `<li class="unit ${un?'':'locked'}">
+              <button class="unit-head" data-unit="${u.id}" aria-expanded="false">
+                <span class="unit-glyph">${esc(u.glyph)}</span>
+                <span><span class="unit-title">${esc(u.title)}</span><br><span class="unit-sub">${esc(u.sub)}</span>
+                  <span class="bar" aria-hidden="true"><i style="width:${w(p.intro)}"></i><i class="l" style="width:${w(p.learned)}"></i><i class="m" style="width:${w(p.mature)}"></i></span></span>
+                <span class="unit-state">${state}</span>
+              </button>
+              <div class="chips" id="chips-${u.id}" hidden></div>
+            </li>`;
+          }).join('')}
+        </ol>
+        <p class="small muted" style="margin:12px 0 0">Bars: grey = seen, gold = learned, green = mastered (remembered for 3+ weeks).</p>
+      </section>
+    </div>
+    <div>
+      <section class="panel">
+        <h2>Writing</h2>
+        ${(()=>{ const wd=dueCountW(), wn=newAvailW(); const any=Object.keys(S.wcards).length;
+          if (wd||wn) return `<p class="small muted" style="margin:0 0 12px">${wd} due, ${wn} new. Trace with your mouse or finger, then write from memory.</p><button class="btn ${canStudy?'quiet':'primary'}" id="write">Practise writing</button>`;
+          if (any) return `<p class="small muted" style="margin:0">Nothing to write right now. ${nextDueTime(S.wcards)<Infinity?'Next writing review '+fmtWhen(nextDueTime(S.wcards))+'.':''}</p>`;
+          return `<p class="small muted" style="margin:0">Each letter becomes available to write once you've learned to read it. You can already practise any letter from the letter chart.</p>`; })()}
+      </section>
+      <section class="panel">
+        <h2>Dictation</h2>
+        ${(()=>{ const dd=dueCountD(), dn=newAvailD(); const any=Object.keys(S.dcards).length;
+          if (dd||dn) return `<p class="small muted" style="margin:0 0 12px">${dd} due, ${dn} new. Hear a word, then build it from syllables or write it.</p><button class="btn quiet" id="dict">Start dictation</button>`;
+          if (any) return `<p class="small muted" style="margin:0">Nothing to do right now. ${nextDueTime(S.dcards)<Infinity?'Next dictation '+fmtWhen(nextDueTime(S.dcards))+'.':''}</p>`;
+          return `<p class="small muted" style="margin:0">Syllables and words become available here once you've learned to read them, starting with the vowel signs.</p>`; })()}
+      </section>
+      <section class="panel">
+        <h2>Letters you mix up</h2>
+        ${pairs.length ? `<ul class="pairs">${pairs.map(([key,e])=>{ const [a,b]=key.split('|'); return `<li><span class="pair">${esc(pieceLabel(a))}<em>and</em>${esc(pieceLabel(b))}<em>${e.n}×</em></span><button class="btn quiet small" data-drill="${esc(key)}">Drill</button></li>`; }).join('')}</ul>`
+          : `<p class="muted small" style="margin:0">When you read one letter as another, the pair shows up here with a quick drill to separate them.</p>`}
+      </section>
+      <section class="panel">
+        <h2>Prove it</h2>
+        <p class="small muted" style="margin:0 0 12px">20 cold reads: real words, fresh nonsense words and conjuncts, in a mix of fonts. Nothing here changes your schedule.</p>
+        <button class="btn ${allDone?'':'quiet'}" id="test2">Take the reading test</button>
+      </section>
+      <section class="panel">
+        <h2>Tools</h2>
+        <div class="links">
+          <button class="btn quiet" id="stats">Progress and stats</button>
+          <button class="btn quiet" id="ref">Letter chart and free writing</button>
+          <button class="btn quiet" id="strokes">Stroke order guide</button>
+          <button class="btn quiet" id="typing">Romanization key</button>
+          <button class="btn quiet" id="settings">Settings and backup</button>
+        </div>
+      </section>
+    </div>
+  </div>`;
+  const on=(id,f)=>{ const el=document.getElementById(id); if(el) el.onclick=f; };
+  on('go',()=>startSession('srs')); on('write',()=>startSession('write')); on('dict',()=>startSession('dict')); on('stats',renderStats); on('test',startTest); on('test2',startTest);
+  on('ref',renderRef); on('strokes',showStrokeGuide); on('typing',showTyping); on('settings',showSettings);
+  app.querySelectorAll('[data-drill]').forEach(b=>b.onclick=()=>startDrill(b.dataset.drill));
+  app.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{
+    const u=UNIT_BY_ID[b.dataset.unit]; const box=document.getElementById('chips-'+u.id);
+    const open=box.hidden; box.hidden=!open; b.setAttribute('aria-expanded',open);
+    if(open){
+      const reads=u.cards.filter(id=>CARD[id].type==='read');
+      box.innerHTML = reads.map(id=>{ const c=S.cards[id]; return `<span class="chip ${c?(isMature(c)?'m':''):'new'}" title="${esc(romanize(CARD[id].text))}">${esc(CARD[id].text)}</span>`; }).join('');
+    }
+  });
+  save();
+}
+function fmtWhen(t){
+  const d=t-Date.now(); if(d<=0) return 'now';
+  if (d<60*MIN) return `in ${Math.ceil(d/MIN)} min`;
+  const dt=new Date(t), today=dayKey(), tk=dayKey(t);
+  const hm=dt.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  if (tk===today) return `today at ${hm}`;
+  const tm=new Date(); tm.setDate(tm.getDate()+1);
+  if (tk===dayKey(tm)) return `tomorrow at ${hm}`;
+  return 'on '+dt.toLocaleDateString([], {weekday:'long',month:'short',day:'numeric'});
+}
+
+/* ---------- Sessions ---------- */
+const isDeckSession = ()=> sess && ['srs','write','dict'].includes(sess.type);
+function startSession(type){ sess={type,lastId:null,done:0,right:0,mistakes:[],store:type==='write'?S.wcards:type==='dict'?S.dcards:S.cards}; view='study'; nextCard(); }
+function pickNextSrs(){ return pickNext(S.cards,nextNewCard); }
+function pickNext(store,newFn){
+  const now=Date.now(); const cards=Object.entries(store);
+  const learnDue=cards.filter(([id,c])=>c.s==='learn'&&c.due<=now).sort((a,b)=>a[1].due-b[1].due);
+  const revDue=cards.filter(([id,c])=>c.s==='review'&&c.due<=now).sort((a,b)=>a[1].due-b[1].due);
+  const notLast=list=>list.find(([id])=>id!==sess.lastId);
+  let hit = notLast(learnDue) || notLast(revDue);
+  if (hit) return {id:hit[0]};
+  const nw=newFn(); if(nw) return {id:nw,isNew:true};
+  if (learnDue.length) return {id:learnDue[0][0]};
+  if (revDue.length) return {id:revDue[0][0]};
+  const soon=cards.filter(([id,c])=>c.s==='learn'&&c.due<=now+20*MIN).sort((a,b)=>a[1].due-b[1].due);
+  if (soon.length) return {wait:soon[0][1].due-now};
+  return null;
+}
+function nextCard(){
+  if (sess.type==='write'){ nextWrite(); return; }
+  if (sess.type==='dict'){ nextDict(); return; }
+  if (sess.type!=='srs'){ nextItem(); return; }
+  const pick=pickNextSrs();
+  if (!pick){ renderSummary(); return; }
+  if (pick.wait){ renderWait(pick.wait); return; }
+  const card=CARD[pick.id];
+  if (pick.isNew){
+    const u=UNIT_BY_ID[card.unit];
+    if (u.intro && !S.seenIntro[u.id]){ renderUnitIntro(u, ()=>{ S.seenIntro[u.id]=1; save(); nextCard(); }); return; }
+    if (card.intro){ renderIntro(card, ()=>{ introduce(card.id, 25e3); save(); sess.lastId=card.id; nextCard(); }); return; }
+    introduce(card.id,0); save();
+  }
+  showCard({id:card.id, text:card.text, mode:card.type, kind:card.kind, meaning:card.meaning, isNew:!!pick.isNew});
+}
+function kindLabel(k,mode){
+  if (mode==='pick') return 'Pick the matching letter';
+  return {letter:'Read the letter',syll:'Read the syllable',conj:'Read the conjunct',word:'Read the word',pseudo:'Read the nonsense word',phrase:'Read the sentence'}[k]||'Read it';
+}
+function pickFont(){ return S.set.fonts && Math.random()<0.35 ? 'sans' : ''; }
+
+function studyBar(){
+  let counts='';
+  if (isDeckSession()){
+    const now=Date.now(); const vals=Object.values(sess.store);
+    const l=vals.filter(c=>c.s==='learn'&&c.due<=now+20*MIN).length, r=vals.filter(c=>c.s==='review'&&c.due<=now).length;
+    counts=`<span>Learning <b>${l}</b></span><span>Due <b>${r}</b></span><span>New <b>${sess.type==='write'?newAvailW():sess.type==='dict'?newAvailD():newAvailable()}</b></span>`;
+  } else counts=`<span>Question <b>${Math.min(sess.idx+1,sess.items.length)}</b> of <b>${sess.items.length}</b></span><span>Right <b>${sess.right}</b></span>`;
+  return `<div class="studybar"><button class="btn quiet" id="end">${isDeckSession()?'End session':'Stop'}</button><div class="counts">${counts}</div><button class="btn quiet" id="help">Romanization key</button></div>`;
+}
+function bindBar(){ $('#end').onclick=()=>{ if(isDeckSession()) renderSummary(); else renderHome(); }; $('#help').onclick=showTyping; }
+
+function showCard(c){
+  cur=Object.assign({phase:'ask',font:pickFont(),started:Date.now()},c);
+  cur.aks=parse(c.text);
+  if (c.mode==='pick') renderPick(); else if (S.set.answer==='flip') renderFlip(); else renderRead();
+}
+
+function renderRead(){
+  const c=cur;
+  app.innerHTML=studyBar()+`
+  <section class="card" id="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">${kindLabel(c.kind,'read')}${c.isNew&&c.kind!=='letter'?' · first time':''}</div>
+    <div class="glyph ${sizeClass(c.text,c.aks)} ${c.font}" lang="hi">${esc(c.text)}</div>
+    <div class="answer-row"><input id="ans" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Type how it reads" placeholder="type how it reads"><button class="btn primary" id="chk">Check</button></div>
+    <div id="fb"></div>
+  </div></section>
+  <p class="keys">Press Enter to check. Capitals matter: T, D, N, Sh, Ch are different letters from t, d, n, sh, ch.</p>`;
+  bindBar();
+  const inp=$('#ans'); inp.focus();
+  $('#chk').onclick=checkRead; cur.askEnter=checkRead;
+}
+
+/* ---------- Flip cards: read it in your head, flip, and rate yourself honestly ---------- */
+function renderFlip(){
+  const c=cur; c.style='flip';
+  app.innerHTML=studyBar()+`
+  <section class="card" id="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">${kindLabel(c.kind,'read')}${c.isNew&&c.kind!=='letter'?' · first time':''}</div>
+    <div class="glyph ${sizeClass(c.text,c.aks)} ${c.font}" lang="hi">${esc(c.text)}</div>
+    <p class="hint" id="say">Read it out loud before you flip.</p>
+    <div class="actions" id="flipacts"><button class="btn primary" id="flip">Show answer</button></div>
+    <div id="fb"></div>
+  </div></section>
+  <p class="keys">Space or Enter flips the card. Then answer with the number keys, or tap.</p>`;
+  bindBar();
+  $('#flip').onclick=flipCard; $('#flip').focus(); cur.askEnter=flipCard;
+}
+function flipCard(){
+  if (cur.phase!=='ask') return;
+  const c=cur; c.phase='fb'; c.fbAt=Date.now(); c.ms=Date.now()-c.started; c.marked=new Set(); c.wrongSet=c.marked;
+  $('#flipacts').remove(); $('#say').remove();
+  const single=c.aks.length===1;
+  let chips='';
+  if (!single){
+    let html=''; c.aks.forEach((a,i)=>{
+      html+=`<button class="aks tap" data-i="${i}" aria-pressed="false"><span class="g" lang="hi">${esc(a.t)}</span><span class="r">${esc(a.rom||'a')}</span><span class="p" lang="hi">${esc(partsOf(a).join(' + '))}</span></button>`;
+      if (a.wordEnd && i<c.aks.length-1) html+='<span class="space"></span>';
+    });
+    chips=`<div class="aks-row">${html}</div><p class="small muted" style="margin:2px 0 0">Misread a part? Tap it.</p><div id="mixpick"></div>`;
+  }
+  const a0=c.aks[0];
+  const letterHint = single ? (()=>{ const iv=a0.pieces.find(p=>p.k==='v'), cp=a0.pieces.find(p=>p.k==='c'), vp=a0.pieces.find(p=>p.k==='m'); return iv?VHINT[iv.ch]: (cp&&vp&&vp.ch===''&&CONS[cp.ch])?CONS[cp.ch].h : (vp&&MHINT[vp.ch])?MHINT[vp.ch]:''; })() : '';
+  $('#fb').innerHTML=`
+    <div class="correct-rom" style="margin-top:4px">${esc(romanize(c.text))} ${speakBtn(c.text)}</div>
+    ${c.meaning?`<div class="meaning">${esc(c.meaning)}</div>`:''}
+    ${c.kind==='pseudo'?'<div class="meaning">not a real word</div>':''}
+    ${letterHint?`<p class="hint" style="margin-top:6px">${esc(letterHint)}</p>`:''}
+    ${single?`<div id="mixpick"></div>`:chips}
+    <div class="actions" id="acts"></div>`;
+  app.querySelectorAll('.aks.tap').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; const on=!c.marked.has(i);
+    if(on) c.marked.add(i); else c.marked.delete(i);
+    b.classList.toggle('bad',on); b.setAttribute('aria-pressed',on);
+    renderFlipActions(); if(on) showMixPicker(i);
+  });
+  renderFlipActions(); bindSpeak();
+  if (single) showMixPicker(0,true);
+  if (S.set.audio) speak(c.text);
+}
+/* After a flip there is no typed answer, so the reader says which letter they swapped. This feeds the look-alike tracker. */
+function mixCandidates(a){
+  const out=[];
+  a.pieces.forEach((p,pi)=>{
+    if (p.special||p.k==='n'||p.ch===HAL) return;
+    const pool = p.k==='c'?CONS_KEYS : p.k==='v'?VOWEL_KEYS : MATRA_KEYS;
+    [...confusedWith(p.ch),...lookalikes(p.ch)].filter(x=>pool.includes(x)&&x!==p.ch).forEach(x=>{
+      const t=buildAk(a.pieces.map((q,qi)=>qi===pi?Object.assign({},q,{ch:x,schwa:x===''&&p.k==='m'}):q));
+      if (!out.some(o=>o.t===t)) out.push({t,a:p.ch,b:x,k:p.k});
+    });
+  });
+  return out.slice(0,6);
+}
+function buildAk(pieces){
+  const cs=pieces.filter(p=>p.k==='c').map(p=>p.ch);
+  const v=pieces.find(p=>p.k==='v'), m=pieces.find(p=>p.k==='m'), n=pieces.find(p=>p.k==='n');
+  if (v) return v.ch+(n?n.ch:'');
+  return cs.join(HAL)+(m?m.ch:'')+(n?n.ch:'');
+}
+function showMixPicker(i,optional){
+  const box=$('#mixpick'); if(!box) return;
+  const a=cur.aks[i]; const cands=mixCandidates(a);
+  if (!cands.length){ box.innerHTML=''; return; }
+  box.innerHTML=`<div class="mix" style="background:var(--bg)"><p class="small" style="margin:0 0 8px">${optional?'Did you read it as one of these instead?':`What did you read <span class="deva">${esc(a.t)}</span> as?`}</p>
+    <div class="row" style="justify-content:center">${cands.map((o,j)=>`<button class="btn quiet mixopt" data-j="${j}"><span class="deva" style="font-size:24px">${esc(o.t)}</span> <span class="small">${esc(romanize(o.t))}</span></button>`).join('')}</div></div>`;
+  box.querySelectorAll('.mixopt').forEach(b=>b.onclick=()=>{
+    const o=cands[+b.dataset.j]; recordConfusion(o.a,o.b,o.k); save();
+    cur.marked.add(i); const chip=app.querySelector(`.aks.tap[data-i="${i}"]`); if(chip){ chip.classList.add('bad'); chip.setAttribute('aria-pressed','true'); }
+    box.innerHTML=`<div class="mix">Noted: you read <span class="deva">${esc(pieceLabel(o.a))}</span> as <span class="deva">${esc(pieceLabel(o.b))}</span>. This pair is now tracked on your overview.</div>`;
+    renderFlipActions();
+  });
+}
+function renderFlipActions(){
+  const acts=$('#acts'); const missed=cur.marked.size>0;
+  if (sess.type!=='srs'){
+    acts.innerHTML=`<button class="btn ${missed?'':'primary sel'}" id="rt">I read it right (1)</button><button class="btn ${missed?'primary sel':''}" id="wr">I got it wrong (2)</button>`;
+    $('#rt').onclick=()=>finishItem(true); $('#wr').onclick=()=>finishItem(false);
+    cur.enter=()=>finishItem(!missed); cur.keys={'1':()=>finishItem(true),'2':()=>finishItem(false)}; return;
+  }
+  const def=missed?0:2;
+  acts.innerHTML=[['Again',0],['Hard',1],['Good',2],['Easy',3]].map(([l,g])=>`<button class="btn ${g===def?'primary sel':''}" data-g="${g}">${l} <span class="small">(${g+1})</span></button>`).join('');
+  acts.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>finishSrs(+b.dataset.g));
+  cur.enter=()=>finishSrs(def); cur.keys={'1':()=>finishSrs(0),'2':()=>finishSrs(1),'3':()=>finishSrs(2),'4':()=>finishSrs(3)};
+}
+function checkRead(){
+  if (cur.phase!=='ask') return;
+  const raw=$('#ans').value; if(!raw.trim()){ $('#ans').focus(); return; }
+  cur.phase='fb'; cur.fbAt=Date.now(); cur.ms=Date.now()-cur.started;
+  const r=check(cur.aks,raw); cur.result=r;
+  let mix=null;
+  if (!r.ok && r.to-r.from===1){ mix=explain(cur.aks[r.from], r.typed); if(mix) recordConfusion(mix.a,mix.b,mix.k); }
+  cur.mix=mix; if(!r.ok && r.to>r.from){ cur.wrongSet=new Set(); for(let i=r.from;i<r.to;i++) cur.wrongSet.add(i); }
+  $('#ans').disabled=true; $('#chk').hidden=true;
+  renderFeedback();
+}
+function slowLimit(){ const n=cur.aks.length; if(cur.mode==='pick') return 4500; if(cur.mode==='dict') return 4000+1800*n; if(n<=1) return 5000; return 3500+1200*n; }
+function renderFeedback(){
+  const c=cur, r=c.result, ok=r.ok;
+  $('#card').classList.add(ok?'ok':'no');
+  const full=romanize(c.text);
+  const single = c.aks.length===1;
+  let chips='';
+  if (!single || !ok){
+    let html=''; c.aks.forEach((a,i)=>{
+      const bad=!ok && i>=r.from && i<r.to;
+      html+=`<div class="aks ${bad?'bad':''}"><span class="g" lang="hi">${esc(a.t)}</span><span class="r">${esc(a.rom||'a')}</span><span class="p" lang="hi">${esc(partsOf(a).join(' + '))}</span>${bad&&i===r.from?`<span class="y">you: ${esc(r.typed||'nothing')}</span>`:''}</div>`;
+      if (a.wordEnd && i<c.aks.length-1) html+='<span class="space"></span>';
+    });
+    chips=`<div class="aks-row">${html}</div>`;
+  }
+  let extra='';
+  if (!ok && r.to===r.from) extra=`<p class="typed-as">You typed something extra: <b>${esc(r.typed)}</b></p>`;
+  let mix='';
+  if (c.mix){ const m=c.mix; mix=`<div class="mix">You read <span class="deva">${esc(pieceLabel(m.a))}</span> (${esc(pieceRom(m.a,m.k))}) as <span class="deva">${esc(pieceLabel(m.b))}</span> (${esc(pieceRom(m.b,m.k))}). This pair is now tracked on your overview.</div>`; }
+  const accepted = single ? `<p class="small muted" style="margin:6px 0 0">Accepted: ${optList(c.aks[0].opts.filter(o=>o!==''))}</p>` : '';
+  $('#fb').innerHTML=`
+    <div class="verdict ${ok?'ok':'no'}">${ok?(c.ms>slowLimit()?'Right, but slow':'Right'):'Not quite'}</div>
+    <div class="correct-rom">${esc(full)} ${speakBtn(c.text)}</div>
+    ${c.meaning?`<div class="meaning">${esc(c.meaning)}</div>`:''}
+    ${c.kind==='pseudo'?'<div class="meaning">not a real word</div>':''}
+    ${!ok?`<p class="typed-as">You typed: <b>${esc(r.s||'(nothing)')}</b></p>`:''}
+    ${chips}${extra}${mix}${!single&&!ok?'':accepted}
+    <div class="actions" id="acts"></div>`;
+  renderActions(ok);
+  bindSpeak();
+  if (S.set.audio) speak(c.text);
+}
+function renderActions(ok){
+  const acts=$('#acts');
+  if (!isDeckSession()){
+    acts.innerHTML=`<button class="btn primary" id="next">Next</button>`;
+    $('#next').onclick=()=>finishItem(ok); $('#next').focus(); cur.enter=()=>finishItem(ok); return;
+  }
+  if (ok){
+    const slow=cur.ms>slowLimit(); const def=slow?1:2;
+    acts.innerHTML=[['Hard',1],['Good',2],['Easy',3]].map(([l,g])=>`<button class="btn ${g===def?'primary sel':''}" data-g="${g}">${l} <span class="small">(${g})</span></button>`).join('');
+    acts.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>finishSrs(+b.dataset.g));
+    cur.enter=()=>finishSrs(def); cur.keys={'1':()=>finishSrs(1),'2':()=>finishSrs(2),'3':()=>finishSrs(3)};
+  } else {
+    acts.innerHTML=`<button class="btn primary" id="cont">Continue</button>${cur.mode==='read'?'<button class="btn quiet" id="override">I was right (typo or spelling)</button>':''}`;
+    $('#cont').onclick=()=>finishSrs(0);
+    const ov=$('#override'); if(ov) ov.onclick=()=>{ if(cur.mix){ const k=[cur.mix.a,cur.mix.b].sort().join('|'); if(S.conf[k]){ S.conf[k].n--; if(S.conf[k].n<=0) delete S.conf[k]; } } finishSrs(2); };
+    cur.enter=()=>finishSrs(0);
+  }
+}
+function finishSrs(g){
+  if (cur.phase!=='fb') return; cur.phase='done';
+  sess.done++; if(g>0) sess.right++; else sess.mistakes.push(cur.text);
+  if (sess.type==='srs'||(sess.type==='dict'&&cur.mode==='dict')) trackLetters(cur.aks, g>0, cur.wrongSet||(cur.mode==='pick'&&g===0?new Set([0]):null));
+  schedule(cur.id,g,sess.store); sess.lastId=cur.id; nextCard();
+}
+
+/* Pick mode: sound → letter, with look-alikes as distractors */
+function distractors(target,n){
+  const a=parse(target)[0]; const P=a.pieces;
+  const cp=P.find(p=>p.k==='c'), vp=P.find(p=>p.k==='m'), iv=P.find(p=>p.k==='v');
+  const seen=x=>!!S.cards['r:'+x];
+  let cands=[];
+  if (iv){ cands=[...confusedWith(iv.ch),...lookalikes(iv.ch),...shuffle(VOWEL_KEYS.filter(seen)),...shuffle(VOWEL_KEYS)]; }
+  else if (vp && vp.ch===''){ const C=cp.ch; cands=[...confusedWith(C),...lookalikes(C),...shuffle(CONS_KEYS.filter(seen)),...shuffle(CONS_KEYS.slice(0,33))]; }
+  else { const C=cp.ch, m=vp.ch;
+    cands=[...confusedWith(m).map(x=>C+x),...lookalikes(m).map(x=>C+x),...confusedWith(C).map(x=>x+m),...lookalikes(C).map(x=>x+m),...shuffle(MATRA_KEYS.slice(0,11)).map(x=>C+x)]; }
+  const out=[]; for (const x of cands){ if(x!==target && !out.includes(x) && parse(x).length===1) out.push(x); if(out.length>=n) break; }
+  return out;
+}
+function renderPick(){
+  const c=cur;
+  if (!c.options) c.options=shuffle([c.text,...distractors(c.text,3)]);
+  const a=c.aks[0]; const rom=a.rom||a.pieces.map(p=>p.o[0]).join('');
+  const iv=a.pieces.find(p=>p.k==='v'), cp=a.pieces.find(p=>p.k==='c'), vp=a.pieces.find(p=>p.k==='m');
+  let hint = iv ? VHINT[iv.ch] : (vp&&vp.ch===''&&cp) ? CONS[cp.ch].h : (vp&&MHINT[vp.ch]? `${cp.ch} with ${MHINT[vp.ch]}`:'' );
+  app.innerHTML=studyBar()+`
+  <section class="card" id="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">${kindLabel(c.kind,'pick')}</div>
+    <div class="prompt-rom">${esc(rom)}</div>
+    <p class="hint">${esc(hint||'')}</p>
+    <div class="options">${c.options.map((o,i)=>`<button class="opt ${c.font==='sans'?'sans':''}" data-o="${esc(o)}" lang="hi"><kbd>${i+1}</kbd>${esc(o)}</button>`).join('')}</div>
+    <div id="fb"></div>
+  </div></section>
+  <p class="keys">Press 1 to 4, or click a letter.</p>`;
+  if (c.font==='sans') app.querySelectorAll('.opt').forEach(b=>b.style.fontFamily='var(--deva-sans)');
+  bindBar();
+  app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>choosePick(b.dataset.o));
+  cur.keys={}; c.options.forEach((o,i)=>cur.keys[String(i+1)]=()=>choosePick(o));
+}
+function choosePick(o){
+  if (cur.phase!=='ask') return;
+  cur.phase='fb'; cur.fbAt=Date.now(); cur.ms=Date.now()-cur.started; cur.keys=null;
+  const ok=o===cur.text;
+  app.querySelectorAll('.opt').forEach(b=>{ b.disabled=true; if(b.dataset.o===cur.text) b.classList.add('right'); else if(b.dataset.o===o) b.classList.add('wrong'); });
+  $('#card').classList.add(ok?'ok':'no');
+  if (!ok){
+    const A=parse(cur.text)[0].pieces, B=parse(o)[0].pieces;
+    if (A.length===B.length){ const diff=A.map((p,i)=>[p,B[i]]).filter(([p,q])=>p.ch!==q.ch); if(diff.length===1) recordConfusion(diff[0][0].ch,diff[0][1].ch,diff[0][0].k); }
+  }
+  $('#fb').innerHTML=`<div class="verdict ${ok?'ok':'no'}">${ok?(cur.ms>slowLimit()?'Right, but slow':'Right'):'Not quite'}</div>
+    <div class="correct-rom"><span class="deva" style="font-size:40px">${esc(cur.text)}</span> is ${esc(romanize(cur.text))} ${speakBtn(cur.text)}</div>
+    ${!ok?`<p class="typed-as">You picked <span class="deva" style="font-size:24px">${esc(o)}</span>, which is ${esc(romanize(o))}</p>`:''}
+    <div class="actions" id="acts"></div>`;
+  renderActions(ok); bindSpeak();
+  if (S.set.audio) speak(cur.text);
+}
+
+/* Intros */
+function renderIntro(card, done){
+  const it=card.intro; let glyph, title, body='', rom='';
+  if (it.kind==='letter'){
+    const ch=it.ch; glyph=ch;
+    const isV=VOWEL_LETTERS[ch]!==undefined;
+    const opts=isV?VOW[VOWEL_LETTERS[ch]]:CONS[ch].r;
+    rom=opts[0]+(isV?'':' (said “'+opts[0]+'a”)');
+    title='New letter';
+    const la=lookalikes(ch).filter(x=>x!=='');
+    body=`<p>${esc(isV?VHINT[ch]:CONS[ch].h)}.</p><p>Type it as ${optList(opts)}.</p>${la.length?`<p>Don't mix it up with ${la.slice(0,3).map(x=>`<span class="deva">${esc(x)}</span> (${esc(romanize(x))})`).join(', ')}.</p>`:''}`;
+  } else if (it.kind==='matra'){
+    glyph='◌'+it.m; title='New vowel sign'; rom=VOW[MATRA_V[it.m]][0];
+    const same=VOWEL_KEYS.find(v=>VOWEL_LETTERS[v]===MATRA_V[it.m]);
+    body=`<p>This is how <span class="deva">${esc(same)}</span> looks when it follows a consonant: ${esc(MHINT[it.m])}.</p><p>Example: <span class="deva">${esc(it.ex)}</span> = <b>${esc(romanize(it.ex))}</b>.</p>${lookalikes(it.m).filter(x=>x).length?`<p>Don't mix it up with ${lookalikes(it.m).filter(x=>x).map(x=>`<span class="deva">◌${esc(x)}</span> (${esc(VOW[MATRA_V[x]][0])})`).join(', ')}.</p>`:''}`;
+  } else { glyph=it.glyph; title=it.title; body=`<p>${esc(it.body)}</p>`; }
+  view='study';
+  app.innerHTML=studyBar()+`
+  <section class="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">${esc(title)}</div>
+    <div class="glyph ${[...glyph].length<=2?'s1':'s2'}" lang="hi">${esc(glyph)}</div>
+    ${rom?`<div class="correct-rom">${esc(rom)} ${speakBtn(it.ex||it.ch||'')}</div>`:''}
+    <div class="intro-note" style="margin-top:14px">${body}</div>
+    <div class="actions"><button class="btn primary" id="ok">Got it, test me later</button></div>
+  </div></section>
+  <p class="keys">Look closely, then press Enter. It will come back in a moment as a recall test.</p>`;
+  bindBar(); bindSpeak();
+  cur={phase:'intro',enter:done}; $('#ok').onclick=done; $('#ok').focus();
+  if (S.set.audio && (it.ch||it.ex)) speak(it.ch||it.ex);
+}
+function renderUnitIntro(u, done){
+  view='study';
+  app.innerHTML=studyBar()+`
+  <section class="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">New step: ${esc(u.title)}</div>
+    <div class="glyph s2" lang="hi">${esc(u.glyph)}</div>
+    <div class="intro-note"><p><b>${esc(u.intro.title)}</b></p><p>${esc(u.intro.body)}</p></div>
+    <div class="actions"><button class="btn primary" id="ok">Start</button></div>
+  </div></section>`;
+  bindBar(); cur={phase:'intro',enter:done}; $('#ok').onclick=done; $('#ok').focus();
+}
+let waitTimer=null;
+function renderWait(ms){
+  const until=Date.now()+ms;
+  app.innerHTML=studyBar()+`<section class="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">Short pause</div><p>Your next card is being held back so that it becomes a real recall test, not a copy of what you just saw. It will appear by itself when the timer ends.</p>
+    <div class="correct-rom" id="cd"></div>
+    <div class="actions"><button class="btn primary" id="now">Show it now</button><button class="btn quiet" id="stop">End session</button></div></div></section>`;
+  bindBar();
+  const tick=()=>{ const left=Math.max(0,until-Date.now()); const el=$('#cd'); if(!el){ clearInterval(waitTimer); return; } const sec=Math.ceil(left/1000); el.textContent=Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0'); if(left<=0){ clearInterval(waitTimer); nextCard(); } };
+  clearInterval(waitTimer); waitTimer=setInterval(tick,250); tick();
+  $('#now').onclick=()=>{ clearInterval(waitTimer); const c=Object.entries(sess.store).filter(([id,c])=>c.s==='learn').sort((a,b)=>a[1].due-b[1].due)[0]; if(!c) return; if(sess.type==='write'){ showWrite(c[0]); return; } if(sess.type==='dict'){ showDict(c[0]); return; } const card=CARD[c[0]]; showCard({id:card.id,text:card.text,mode:card.type,kind:card.kind,meaning:card.meaning}); };
+  $('#stop').onclick=()=>{ clearInterval(waitTimer); renderSummary(); };
+  cur={phase:'wait'};
+}
+function renderSummary(){
+  clearInterval(waitTimer);
+  const s=sess; view='study';
+  const pct=s.done?Math.round(s.right/s.done*100):0;
+  app.innerHTML=`<section class="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">Session finished</div>
+    <div class="prompt-rom">${s.done} answered</div>
+    <p class="hint">${s.done?`${pct}% right on the first try.`:'Nothing was answered this time.'} ${nextDueTime(s.store)<Infinity?'Next review '+fmtWhen(nextDueTime(s.store))+'.':''}</p>
+    ${s.mistakes.length?`<p class="small muted">Missed this time (they will come back soon):</p><div class="row" style="justify-content:center">${[...new Set(s.mistakes)].map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>`:''}
+    <div class="actions"><button class="btn primary" id="home">Back to overview</button></div>
+  </div></section>`;
+  cur={phase:'intro',enter:renderHome}; $('#home').onclick=renderHome; $('#home').focus();
+}
+
+/* ---------- Reading test and drills (they do not change the schedule) ---------- */
+function startTest(){
+  const rng=Math.random;
+  const pool=[...W2,...W3,...W4].map(x=>({text:x[0],meaning:x[1],kind:'word'}));
+  const long=shuffle([...W3,...W4]).slice(0,6).map(x=>({text:x[0],meaning:x[1],kind:'word'}));
+  const mid=shuffle(W2).slice(0,3).map(x=>({text:x[0],meaning:x[1],kind:'word'}));
+  const pseudo=[]; const real=new Set(ALL_WORDS.map(x=>x[0]));
+  while(pseudo.length<8){ const w=makePseudo(rng); if(!real.has(w)&&!pseudo.some(p=>p.text===w)) pseudo.push({text:w,kind:'pseudo'}); }
+  const conj=shuffle(PSEUDO_CLUSTERS).slice(0,3).map(c=>({text:c+PSEUDO_V[3+Math.floor(rng()*10)],kind:'conj'}));
+  sess={type:'test',items:shuffle([...long,...mid,...pseudo,...conj]),idx:0,right:0,results:[]};
+  void pool; view='study'; nextItem();
+}
+function startDrill(key){
+  const [a,b]=key.split('|'); const k=S.conf[key]?S.conf[key].k:'c';
+  const items=[];
+  const base=['क','म','ब','स','ल','प','द','ग','र','न','त','ह'];
+  for (let i=0;i<12;i++){
+    const x=i%2?a:b;
+    let text;
+    if (k==='m') text=base[Math.floor(Math.random()*base.length)]+x;
+    else text=x;
+    items.push({text,kind:k==='m'?'syll':'letter',mode:'pick',pair:[a,b],pk:k});
+  }
+  sess={type:'drill',items:shuffle(items),idx:0,right:0,results:[]}; view='study'; nextItem();
+}
+function nextItem(){
+  if (sess.idx>=sess.items.length){ renderTestSummary(); return; }
+  const it=sess.items[sess.idx];
+  if (it.mode==='pick'){
+    cur=null; showCard({text:it.text,mode:'pick',kind:it.kind});
+    if (it.pair){
+      const other = it.pk==='m' ? [...it.text].slice(0,1).join('')+(it.text.endsWith(it.pair[0])?it.pair[1]:it.pair[0]) : (it.text===it.pair[0]?it.pair[1]:it.pair[0]);
+      const opts=shuffle([it.text,other,...distractors(it.text,4).filter(x=>x!==other).slice(0,2)]);
+      cur.options=opts; renderPick();
+    }
+  } else showCard({text:it.text,mode:'read',kind:it.kind,meaning:it.meaning});
+}
+function finishItem(ok){
+  if (cur.phase!=='fb') return; cur.phase='done';
+  if (ok) sess.right++;
+  sess.results.push({text:cur.text,ok,typed:cur.result?cur.result.s:'',ms:cur.ms});
+  trackLetters(cur.aks, ok, cur.wrongSet||(cur.mode==='pick'&&!ok?new Set([0]):null));
+  logAnswer(ok,{deck:'r'}); save(); sess.idx++; nextItem();
+}
+function renderTestSummary(){
+  const s=sess, n=s.items.length, pct=Math.round(s.right/n*100);
+  const wrong=s.results.filter(r=>!r.ok);
+  const avg=Math.round(s.results.reduce((a,r)=>a+r.ms,0)/n/100)/10;
+  let verdict;
+  if (s.type==='drill') verdict = pct>=90 ? 'You can tell these apart. Keep reviewing and the pair will fade from your list.' : 'Still close. Run the drill again tomorrow; spacing it out works better than repeating it now.';
+  else verdict = pct>=95 ? 'You are reading Devanagari reliably, including words you could not have guessed.' : pct>=80 ? 'Solid, with a few slips. Check which letters caused them below.' : 'Some letters are still unstable. Keep going with the daily reviews and try again in a few days.';
+  app.innerHTML=`<section class="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">${s.type==='drill'?'Drill finished':'Reading test finished'}</div>
+    <div class="prompt-rom">${s.right} of ${n}</div>
+    <p class="hint">${verdict} Average ${avg} s per item.</p>
+    ${wrong.length?`<ul class="summary-list">${wrong.map(r=>`<li><span class="deva">${esc(r.text)}</span><b>${esc(romanize(r.text))}</b>${r.typed?`<span class="muted small">you: ${esc(r.typed)}</span>`:''}</li>`).join('')}</ul>`:''}
+    <div class="actions"><button class="btn primary" id="home">Back to overview</button>${s.type==='test'?'<button class="btn quiet" id="again">New test</button>':''}</div>
+  </div></section>`;
+  cur={phase:'intro',enter:renderHome}; $('#home').onclick=renderHome; $('#home').focus();
+  const ag=$('#again'); if(ag) ag.onclick=startTest;
+}
+
+
+/* ---------- Writing: trace with a mouse or finger, then write from memory ---------- */
+const PAD_FONT = px => `${px}px Mukta, "Noto Sans Devanagari", "Kohinoor Devanagari", "Devanagari MT", "Nirmala UI", Mangal, sans-serif`;
+function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+function makePad(host, text, level){
+  const css=Math.max(220,Math.min(host.clientWidth||340,380)); const dpr=Math.min(window.devicePixelRatio||1,2); const W=Math.round(css*dpr);
+  const cv=document.createElement('canvas'); cv.width=cv.height=W; cv.style.width=cv.style.height=css+'px'; cv.className='pad';
+  cv.setAttribute('aria-label','Drawing area: trace or write '+romanize(text));
+  host.innerHTML=''; host.appendChild(cv);
+  const ctx=cv.getContext('2d');
+  const pad={strokes:[],level,result:null,locked:false,onchange:null};
+  const pen=W*0.05; let cur=null; let gm=null;
+  function layout(){
+    let size=W*0.6; ctx.font=PAD_FONT(size); let m=ctx.measureText(text);
+    let w=(m.actualBoundingBoxLeft+m.actualBoundingBoxRight)||size*0.8, h=(m.actualBoundingBoxAscent+m.actualBoundingBoxDescent)||size;
+    const k=Math.min(W*0.68/w,W*0.68/h); size*=k; ctx.font=PAD_FONT(size); m=ctx.measureText(text);
+    w=(m.actualBoundingBoxLeft+m.actualBoundingBoxRight)||size*0.8; h=(m.actualBoundingBoxAscent+m.actualBoundingBoxDescent)||size;
+    return {size,x:(W-w)/2+(m.actualBoundingBoxLeft||0),y:(W-h)/2+(m.actualBoundingBoxAscent||size*0.8),box:[(W-w)/2,(W-h)/2,w,h]};
+  }
+  const glyph=(c,style)=>{ c.font=PAD_FONT(gm.size); c.fillStyle=style; c.textBaseline='alphabetic'; c.textAlign='left'; c.fillText(text,gm.x,gm.y); };
+  function strokesTo(c,list,style){
+    c.strokeStyle=style; c.fillStyle=style; c.lineWidth=pen; c.lineCap='round'; c.lineJoin='round';
+    list.forEach(st=>{ if(st.length===1){ c.beginPath(); c.arc(st[0][0],st[0][1],pen/2,0,Math.PI*2); c.fill(); return; }
+      c.beginPath(); c.moveTo(st[0][0],st[0][1]); for(let i=1;i<st.length;i++) c.lineTo(st[i][0],st[i][1]); c.stroke(); });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,W);
+    ctx.strokeStyle=cssVar('--line'); ctx.lineWidth=Math.max(1,dpr); ctx.setLineDash([6*dpr,6*dpr]);
+    ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,W); ctx.moveTo(0,W/2); ctx.lineTo(W,W/2); ctx.stroke(); ctx.setLineDash([]);
+    if (!gm) return;
+    if (pad.result){
+      ctx.globalAlpha=0.35; glyph(ctx,cssVar('--good')); ctx.globalAlpha=1;
+      strokesTo(ctx,pad.result.strokes,cssVar('--ink'));
+      ctx.fillStyle=cssVar('--bad'); ctx.globalAlpha=0.45; const cell=W/pad.result.N;
+      pad.result.missed.forEach(i=>{ ctx.fillRect((i%pad.result.N)*cell,Math.floor(i/pad.result.N)*cell,cell,cell); }); ctx.globalAlpha=1;
+      return;
+    }
+    const alpha = pad.level==='trace'?0.3 : pad.level==='faint'?0.1 : 0;
+    if (alpha){ ctx.globalAlpha=alpha; glyph(ctx,cssVar('--ink')); ctx.globalAlpha=1; }
+    strokesTo(ctx,pad.strokes,cssVar('--ink'));
+  }
+  const pt=e=>{ const r=cv.getBoundingClientRect(); return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*W/r.height]; };
+  cv.addEventListener('pointerdown',e=>{ if(pad.locked||!gm) return; e.preventDefault(); try{cv.setPointerCapture(e.pointerId);}catch(_){} cur=[pt(e)]; pad.strokes.push(cur); draw(); pad.onchange&&pad.onchange(); });
+  cv.addEventListener('pointermove',e=>{ if(!cur) return; e.preventDefault(); const q=pt(e), l=cur[cur.length-1]; if(Math.hypot(q[0]-l[0],q[1]-l[1])>1.5*dpr){ cur.push(q); draw(); } });
+  const up=()=>{ cur=null; };
+  cv.addEventListener('pointerup',up); cv.addEventListener('pointercancel',up); cv.addEventListener('pointerleave',up);
+  pad.undo=()=>{ if(pad.locked) return; pad.strokes.pop(); draw(); pad.onchange&&pad.onchange(); };
+  pad.clear=()=>{ if(pad.locked) return; pad.strokes=[]; draw(); pad.onchange&&pad.onchange(); };
+  pad.setLevel=l=>{ pad.level=l; pad.result=null; pad.locked=false; pad.strokes=[]; draw(); };
+  pad.redraw=draw;
+  /* Compare the drawing with the letter on a coarse grid. From memory, the drawing is first scaled into the letter's box. */
+  pad.evaluate=(normalize)=>{
+    const N=64, cell=W/N;
+    const grid=fn=>{ const o=document.createElement('canvas'); o.width=o.height=W; const c=o.getContext('2d'); fn(c); const d=c.getImageData(0,0,W,W).data; const g=new Uint8Array(N*N);
+      for(let y=0;y<W;y+=2) for(let x=0;x<W;x+=2){ if(d[(y*W+x)*4+3]>100) g[Math.min(N-1,Math.floor(y/cell))*N+Math.min(N-1,Math.floor(x/cell))]=1; } return g; };
+    let list=pad.strokes;
+    if (normalize){
+      let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity; list.forEach(st=>st.forEach(([x,y])=>{ x0=Math.min(x0,x); y0=Math.min(y0,y); x1=Math.max(x1,x); y1=Math.max(y1,y); }));
+      x0-=pen/2; y0-=pen/2; x1+=pen/2; y1+=pen/2;
+      const [gx,gy,gw,gh]=gm.box; let sx=gw/Math.max(1,x1-x0), sy=gh/Math.max(1,y1-y0);
+      const r=sx/sy; if(r>1.7) sx=sy*1.7; if(r<1/1.7) sy=sx*1.7;
+      const ox=gx+(gw-(x1-x0)*sx)/2, oy=gy+(gh-(y1-y0)*sy)/2;
+      list=list.map(st=>st.map(([x,y])=>[ox+(x-x0)*sx, oy+(y-y0)*sy]));
+    }
+    const G=grid(c=>glyph(c,'#000')), U=grid(c=>strokesTo(c,list,'#000'));
+    const dil=(g,r)=>{ const o=new Uint8Array(N*N); for(let y=0;y<N;y++) for(let x=0;x<N;x++) if(g[y*N+x]) for(let dy=-r;dy<=r;dy++) for(let dx=-r;dx<=r;dx++){ const X=x+dx,Y=y+dy; if(X>=0&&Y>=0&&X<N&&Y<N) o[Y*N+X]=1; } return o; };
+    const Gd=dil(G,2), Ud=dil(U,1);
+    let u=0,uIn=0,g=0,gIn=0; const missed=[];
+    for(let i=0;i<N*N;i++){ if(U[i]){ u++; if(Gd[i]) uIn++; } if(G[i]){ g++; if(Ud[i]) gIn++; else missed.push(i); } }
+    const P=u?uIn/u:0, C=g?gIn/g:0, score=P+C?2*P*C/(P+C):0;
+    return {score,P,C,missed,N,strokes:list};
+  };
+  pad.show=res=>{ pad.result=res; pad.locked=true; draw(); };
+  const ready=(document.fonts&&document.fonts.load)?document.fonts.load(PAD_FONT(100),text).catch(()=>{}):Promise.resolve();
+  draw(); ready.then(()=>{ gm=layout(); draw(); });
+  return pad;
+}
+
+/* ---------- Stroke order guide ---------- */
+/* Shape families: where the vertical bar (पाई) sits decides the order of the last strokes */
+const BAR_FULL = ['अ','आ','ओ','औ','ख','ग','घ','च','ज','झ','ञ','ण','त','थ','ध','न','प','ब','भ','म','य','ल','व','श','ष','स'];
+const BAR_MID = ['क','फ'];
+const BAR_NONE = ['इ','ई','उ','ऊ','ऋ','ए','ऐ','ङ','छ','ट','ठ','ड','ढ','द','र','ह'];
+function strokeTip(t){
+  const a=parse(t)[0]; const cp=a.pieces.find(p=>p.k==='c'), iv=a.pieces.find(p=>p.k==='v'), vp=a.pieces.find(p=>p.k==='m'&&p.ch&&p.ch!==HAL);
+  const base=(iv?iv.ch:cp.ch); const b=base[0]; const nukta=base.length>1;
+  let tip = BAR_FULL.includes(b) ? 'Draw the body from the left, then the vertical bar on the right from top to bottom, then the top line.'
+    : BAR_MID.includes(b) ? 'Draw the vertical bar in the middle, add the curves on either side, then the top line.'
+    : 'No vertical bar: draw the curves from the top down, then the top line.';
+  if (base==='ऐ') tip='No vertical bar: draw the body from the top down, then the top line, then the stroke above it.';
+  if (base==='ओ') tip='Write अ first (body, then the bars), then the top line, then the stroke on top.';
+  if (base==='औ') tip='Write अ first (body, then the bars), then the top line, then the two strokes on top.';
+  if (vp){
+    const m=vp.ch;
+    if (m==='ि') tip+=' Then add ◌ि: its stem to the left of the letter, with the hook rising over the top line.';
+    else if (['ा','ी','ो','ौ'].includes(m)) tip+=' Then add the sign’s vertical bar to the right, and run the top line across both.';
+    else if (['ु','ू','ृ'].includes(m)) tip+=' Add the sign below the letter after the letter itself.';
+    else tip+=' Add the sign on top after the top line.';
+  }
+  if (nukta) tip+=' Put the dot underneath last.';
+  return tip;
+}
+function showStrokeGuide(){
+  const fam=(list)=>`<p class="deva" style="font-size:26px;margin:4px 0 10px;line-height:1.5">${list.join(' ')}</p>`;
+  openDlg(`<h2>How to write Devanagari</h2>
+  <p class="small">Teachers differ on the details of individual letters, but these habits are common to how Hindi is taught and written by hand. The writing checker looks at the finished shape, not the order, so use these as a guide.</p>
+  <ol class="guide small">
+    <li><b>Top to bottom, left to right.</b> Start each curve at its upper left end.</li>
+    <li><b>Body first.</b> Draw the curves and loops that make the letter recognisable before anything else.</li>
+    <li><b>Then the vertical bar.</b> If the letter has one, draw it from the top down after the body.</li>
+    <li><b>Top line last.</b> The shirorekha goes on after the letter is complete, left to right. In a word, write all the letters first, then draw one continuous line across the whole word.</li>
+    <li><b>Vowel signs after the consonant.</b> Signs below (◌ु ◌ू ◌ृ) come after the letter; signs on top (◌े ◌ै ◌ं ◌ँ) after the top line. ◌ि sits to the left, but most people still draw it after the consonant; either way it must touch the top line.</li>
+    <li><b>Dots last.</b> The nukta under ज़ फ़ ड़ and the dot of ◌ं go on at the very end.</li>
+    <li><b>Keep proportions.</b> Letters hang from the top line; the vertical bar is as tall as the letter, and the bars of ◌ा ◌ी ◌ो ◌ौ match it.</li>
+  </ol>
+  <h3 style="font-size:16px;margin:16px 0 4px">Letters with the bar on the right</h3>${fam(BAR_FULL)}
+  <h3 style="font-size:16px;margin:4px 0 4px">Bar in the middle</h3>${fam(BAR_MID)}
+  <h3 style="font-size:16px;margin:4px 0 4px">No vertical bar</h3>${fam(BAR_NONE)}
+  <div class="actions"><button class="btn primary" data-close>Close</button></div>`);
+}
+
+function writeHint(t){
+  const a=parse(t)[0]; const iv=a.pieces.find(p=>p.k==='v'), cp=a.pieces.find(p=>p.k==='c'), vp=a.pieces.find(p=>p.k==='m');
+  if (iv) return VHINT[iv.ch]; if (vp&&vp.ch==='') return CONS[cp.ch].h; return MHINT[vp.ch]? 'क with '+MHINT[vp.ch] : '';
+}
+function nextWrite(){
+  const pick=pickNext(S.wcards,nextNewWrite);
+  if (!pick){ renderSummary(); return; }
+  if (pick.wait){ renderWait(pick.wait); return; }
+  if (pick.isNew && !S.seenIntro.write){
+    renderUnitIntro({title:'Writing',glyph:'क',intro:{title:'Trace first, then write from memory',body:'Draw with your mouse or finger. New letters start with a clear shape to trace, then a faint one, then nothing: you write from memory and the app lays your letter over the real one, marking missing parts in red. Most people draw the body of the letter first and add the top line (shirorekha) last. The app checks the shape you make, not the order of your strokes, so it cannot correct stroke order.'}}, ()=>{ S.seenIntro.write=1; save(); nextWrite(); });
+    return;
+  }
+  if (pick.isNew){ introduce(pick.id,0,S.wcards); save(); }
+  showWrite(pick.id);
+}
+function showWrite(id){
+  const text=id.slice(2), st=S.wcards[id];
+  const level = st.s==='review' ? 'memory' : (st.step===0 && !st.rl ? 'trace' : 'faint');
+  cur={id,text,mode:'write',phase:'ask',level,started:Date.now(),aks:parse(text)};
+  const label={trace:'Trace the letter',faint:'Trace it again, with less help',memory:'Write it from memory'}[level];
+  app.innerHTML=studyBar()+`
+  <section class="card" id="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">${label}</div>
+    <div class="prompt-rom" style="font-size:clamp(38px,8vw,56px)">${esc(romanize(text))} ${speakBtn(text)}</div>
+    <p class="hint">${esc(writeHint(text))}</p>
+    <div id="padhost" class="padhost"></div>
+    ${level!=='memory'?`<p class="small muted" style="max-width:46ch;margin:10px auto 0">${esc(strokeTip(text))}</p>`:''}
+    <div class="actions" id="padacts"><button class="btn quiet" id="guide">Stroke order</button><button class="btn quiet" id="undo">Undo</button><button class="btn quiet" id="clr">Clear</button><button class="btn primary" id="done" disabled>Check</button></div>
+    <div id="fb"></div>
+  </div></section>
+  <p class="keys">Draw in the box. Press Enter or Check when you're done.</p>`;
+  bindBar(); bindSpeak();
+  const pad=makePad($('#padhost'),text,level); cur.pad=pad;
+  pad.onchange=()=>{ $('#done').disabled=!pad.strokes.length; };
+  $('#undo').onclick=pad.undo; $('#clr').onclick=pad.clear; $('#done').onclick=writeDone; cur.askEnter=writeDone; $('#guide').onclick=showStrokeGuide;
+  if (S.set.audio && level!=='memory') speak(text);
+}
+function writeVerdict(sc){ return sc>=0.8?['ok','Close match']:sc>=0.65?['ok','Mostly there. Check the red parts.']:['no','Quite different from the letter. Compare the shapes.']; }
+function writeDone(){
+  if (cur.phase!=='ask'||!cur.pad.strokes.length) return;
+  cur.phase='fb'; cur.fbAt=Date.now(); cur.ms=Date.now()-cur.started;
+  const res=cur.pad.evaluate(cur.level==='memory'); cur.pad.show(res);
+  const [cls,msg]=writeVerdict(res.score);
+  $('#card').classList.add(cls); $('#padacts').remove();
+  const def = res.score>=0.8?2 : res.score>=0.65?1 : 0;
+  $('#fb').innerHTML=`<div class="verdict ${cls}">${msg}</div>
+    <p class="small muted" style="max-width:46ch;margin:0 auto 6px">${esc(strokeTip(cur.text))}</p>
+    <p class="small muted" style="margin:0">Green is the letter, dark is your drawing${cur.level==='memory'?' (resized to fit)':''}, red is what's missing. Match ${Math.round(res.score*100)}%.</p>
+    <div class="actions" id="acts"></div>`;
+  grade4(def);
+}
+function grade4(def){
+  $('#acts').innerHTML=[['Again',0],['Hard',1],['Good',2],['Easy',3]].map(([l,g])=>`<button class="btn ${g===def?'primary sel':''}" data-g="${g}">${l} <span class="small">(${g+1})</span></button>`).join('');
+  $('#acts').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>finishSrs(+b.dataset.g));
+  cur.enter=()=>finishSrs(def); cur.keys={'1':()=>finishSrs(0),'2':()=>finishSrs(1),'3':()=>finishSrs(2),'4':()=>finishSrs(3)};
+}
+function openTracer(text){
+  openDlg(`<h2><span class="deva" style="font-size:34px">${esc(text)}</span> ${esc(romanize(text))} ${speakBtn(text)}</h2>
+    <div class="row" role="group" aria-label="Guide" style="margin-bottom:10px">${[['trace','Trace'],['faint','Faint guide'],['memory','From memory']].map(([l,n],i)=>`<button class="btn small ${i?'quiet':'primary'}" data-lv="${l}">${n}</button>`).join('')}</div>
+    <div id="dpad" class="padhost"></div>
+    <p class="small muted" style="text-align:center;max-width:46ch;margin:8px auto 0">${esc(strokeTip(text))}</p>
+    <p id="dmsg" class="small muted" style="text-align:center;min-height:1.5em;margin:8px 0 0"></p>
+    <div class="actions"><button class="btn quiet" id="dundo">Undo</button><button class="btn quiet" id="dclr">Clear</button><button class="btn primary" id="dchk">Check</button><button class="btn quiet" data-close>Close</button></div>`, ()=>{
+    const pad=makePad($('#dpad'),text,'trace');
+    dlg.querySelectorAll('[data-speak]').forEach(b=>b.onclick=()=>speak(b.dataset.speak));
+    dlg.querySelectorAll('[data-lv]').forEach(b=>b.onclick=()=>{ dlg.querySelectorAll('[data-lv]').forEach(x=>{ x.classList.toggle('primary',x===b); x.classList.toggle('quiet',x!==b); }); pad.setLevel(b.dataset.lv); $('#dmsg').textContent=''; });
+    $('#dundo').onclick=pad.undo; $('#dclr').onclick=()=>{ pad.result=null; pad.locked=false; pad.clear(); $('#dmsg').textContent=''; };
+    $('#dchk').onclick=()=>{ if(!pad.strokes.length) return; const r=pad.evaluate(pad.level==='memory'); pad.show(r); $('#dmsg').textContent=writeVerdict(r.score)[1]+' Match '+Math.round(r.score*100)+'%. Press Clear to try again.'; };
+  });
+}
+
+
+/* ---------- Dictation: hear it or see its spelling, then build it in Devanagari ---------- */
+const DICT_ITEMS = ORDER.filter(id=>CARD[id].type==='read' && ['syll','conj','word'].includes(CARD[id].kind)).map(id=>CARD[id].text);
+const dictUnlocked = t => isLearned(S.cards['r:'+t]);
+function nextNewDict(){ if(newTodayD()>=S.set.dPerDay) return null; for(const t of DICT_ITEMS) if(!S.dcards['d:'+t]&&dictUnlocked(t)) return 'd:'+t; return null; }
+function newAvailD(){ const left=S.set.dPerDay-newTodayD(); if(left<=0) return 0; let n=0; for(const t of DICT_ITEMS){ if(n>=left) break; if(!S.dcards['d:'+t]&&dictUnlocked(t)) n++; } return n; }
+function dueCountD(){ const now=Date.now(); return Object.values(S.dcards).filter(c=>c.due<=now).length; }
+function nextDict(){
+  const pick=pickNext(S.dcards,nextNewDict);
+  if (!pick){ renderSummary(); return; }
+  if (pick.wait){ renderWait(pick.wait); return; }
+  if (pick.isNew && !S.seenIntro.dict){
+    renderUnitIntro({title:'Dictation',glyph:'?',intro:{title:'From sound to script',body:'You get a word as sound (if your device has a Hindi voice) and as its romanization. Build it from syllable tiles; some tiles are look-alike decoys, chosen from the letters you mix up. Short words can also be written by hand. Going from sound to letters is harder than reading, and practising it makes your reading firmer too.'}}, ()=>{ S.seenIntro.dict=1; save(); nextDict(); });
+    return;
+  }
+  if (pick.isNew){ introduce(pick.id,0,S.dcards); save(); }
+  showDict(pick.id);
+}
+function dictTiles(aks){
+  const tiles=aks.map(a=>a.t), decoys=[];
+  const avoid=t=>tiles.includes(t)||decoys.includes(t);
+  shuffle(aks.map((a,i)=>i)).forEach(i=>{ const c=mixCandidates(aks[i]).map(o=>o.t).filter(t=>!avoid(t)); c.slice(0,aks.length<=2?3:1).forEach(t=>decoys.push(t)); });
+  const want=Math.min(Math.max(3,aks.length),6);
+  for (let tries=0; decoys.length<want && tries<40; tries++){
+    const a=aks[Math.floor(Math.random()*aks.length)]; const pi=a.pieces.findIndex(p=>p.k==='c'&&!p.special);
+    if (pi<0) break;
+    const x=CONS_KEYS[Math.floor(Math.random()*33)];
+    const t=buildAk(a.pieces.map((q,qi)=>qi===pi?Object.assign({},q,{ch:x}):q));
+    if (!avoid(t)) decoys.push(t);
+  }
+  return shuffle([...tiles,...decoys.slice(0,want)]).map(t=>({t,used:false}));
+}
+function showDict(id){
+  const text=id.slice(2); const card=CARD['r:'+text];
+  cur={id,text,mode:'dict',phase:'ask',aks:parse(text),started:Date.now(),picked:[],meaning:card&&card.meaning,font:pickFont()};
+  cur.tiles=dictTiles(cur.aks);
+  const n=cur.aks.length;
+  app.innerHTML=studyBar()+`
+  <section class="card" id="card"><div class="card-rule"></div><div class="card-body">
+    <div class="kind">Dictation: build it in Devanagari</div>
+    <div class="prompt-rom" style="font-size:clamp(34px,8vw,54px)">${esc(romanize(text))} ${speakBtn(text)}</div>
+    ${cur.meaning?`<p class="hint">${esc(cur.meaning)}</p>`:'<p class="hint">&nbsp;</p>'}
+    <div id="dictarea">
+      <div class="slots" id="slots"></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="actions" id="dictacts"><button class="btn quiet" id="dundo">Undo</button>${n<=4?'<button class="btn quiet" id="dwrite">Write it by hand instead</button>':''}</div>
+    </div>
+    <div id="fb"></div>
+  </div></section>
+  <p class="keys">Tap the syllables in order, or press their numbers. Backspace undoes. It checks itself when every slot is filled.</p>`;
+  bindBar(); bindSpeak();
+  const draw=()=>{
+    $('#slots').innerHTML=cur.aks.map((a,i)=>`<span class="slot ${cur.font}" lang="hi">${cur.picked[i]!==undefined?esc(cur.tiles[cur.picked[i]].t):''}</span>`).join('');
+    $('#tiles').innerHTML=cur.tiles.map((o,i)=>`<button class="tile ${cur.font}" data-i="${i}" lang="hi" ${o.used?'disabled':''}>${i<9?`<kbd>${i+1}</kbd>`:''}${esc(o.t)}</button>`).join('');
+    app.querySelectorAll('.tile').forEach(b=>b.onclick=()=>take(+b.dataset.i));
+  };
+  const take=i=>{ if(cur.phase!=='ask'||cur.tiles[i].used) return; cur.tiles[i].used=true; cur.picked.push(i); draw(); if(cur.picked.length===n) dictCheck(); };
+  cur.undo=()=>{ if(cur.phase!=='ask'||!cur.picked.length) return; cur.tiles[cur.picked.pop()].used=false; draw(); };
+  cur.keys={}; cur.tiles.forEach((o,i)=>{ if(i<9) cur.keys[String(i+1)]=()=>take(i); });
+  $('#dundo').onclick=cur.undo;
+  const dw=$('#dwrite'); if(dw) dw.onclick=dictWriteMode;
+  draw();
+  if (S.set.audio) speak(text);
+}
+function dictCheck(){
+  const c=cur; c.phase='fb'; c.fbAt=Date.now(); c.ms=Date.now()-c.started; c.keys=null;
+  const got=c.picked.map(i=>c.tiles[i].t);
+  c.wrongSet=new Set(); c.aks.forEach((a,i)=>{ if(got[i]!==a.t) c.wrongSet.add(i); });
+  const ok=c.wrongSet.size===0;
+  const mixes=[];
+  c.wrongSet.forEach(i=>{
+    const A=c.aks[i].pieces, B=parse(got[i])[0]?parse(got[i])[0].pieces:[];
+    if (A.length===B.length){ const d=A.map((p,j)=>[p,B[j]]).filter(([p,q])=>p.ch!==q.ch); if(d.length===1&&d[0][0].k===d[0][1].k){ recordConfusion(d[0][0].ch,d[0][1].ch,d[0][0].k); mixes.push(d[0]); } }
+  });
+  $('#card').classList.add(ok?'ok':'no'); $('#dictacts').remove(); $('#tiles').remove();
+  app.querySelectorAll('.slot').forEach((el,i)=>el.classList.add(c.wrongSet.has(i)?'bad':'good'));
+  let chips=''; c.aks.forEach((a,i)=>{ chips+=`<div class="aks ${c.wrongSet.has(i)?'bad':''}"><span class="g" lang="hi">${esc(a.t)}</span><span class="r">${esc(a.rom||'a')}</span><span class="p" lang="hi">${esc(partsOf(a).join(' + '))}</span>${c.wrongSet.has(i)?`<span class="y">you: <span lang="hi">${esc(got[i])}</span></span>`:''}</div>`; });
+  $('#fb').innerHTML=`<div class="verdict ${ok?'ok':'no'}">${ok?(c.ms>slowLimit()?'Right, but slow':'Right'):'Not quite'}</div>
+    <div class="glyph s3" lang="hi" style="margin:0">${esc(c.text)}</div>
+    ${!ok&&c.aks.length>1?`<div class="aks-row">${chips}</div>`:''}
+    ${mixes.map(([p,q])=>`<div class="mix">You chose <span class="deva">${esc(pieceLabel(q.ch))}</span> (${esc(pieceRom(q.ch,q.k))}) instead of <span class="deva">${esc(pieceLabel(p.ch))}</span> (${esc(pieceRom(p.ch,p.k))}).</div>`).join('')}
+    <div class="actions" id="acts"></div>`;
+  renderActions(ok);
+}
+function dictWriteMode(){
+  cur.mode='dictw';
+  $('#dictarea').innerHTML=`<div id="padhost" class="padhost"></div><p class="small muted" style="margin:8px 0 0">Write the whole word, with one top line across it.</p>
+    <div class="actions" id="dictacts"><button class="btn quiet" id="undo">Undo</button><button class="btn quiet" id="clr">Clear</button><button class="btn primary" id="done" disabled>Check</button></div>`;
+  const pad=makePad($('#padhost'),cur.text,'memory'); cur.pad=pad; cur.keys=null;
+  pad.onchange=()=>{ $('#done').disabled=!pad.strokes.length; };
+  const done=()=>{
+    if (cur.phase!=='ask'||!pad.strokes.length) return;
+    cur.phase='fb'; cur.fbAt=Date.now(); cur.ms=Date.now()-cur.started;
+    const res=pad.evaluate(true); pad.show(res); const [cls,msg]=writeVerdict(res.score);
+    $('#card').classList.add(cls); $('#dictacts').remove();
+    $('#fb').innerHTML=`<div class="verdict ${cls}">${msg}</div><div class="glyph s3" lang="hi" style="margin:0">${esc(cur.text)}</div>
+      <p class="small muted" style="margin:0">Green is the word, dark is your writing (resized to fit), red is what's missing. Match ${Math.round(res.score*100)}%.</p><div class="actions" id="acts"></div>`;
+    grade4(res.score>=0.8?2:res.score>=0.65?1:0);
+  };
+  $('#undo').onclick=pad.undo; $('#clr').onclick=pad.clear; $('#done').onclick=done; cur.askEnter=done;
+}
+
+/* ---------- Progress stats ---------- */
+function deckStats(store,ids){ let seen=0,learned=0,mature=0; ids.forEach(id=>{ const c=store[id]; if(c){ seen++; if(isLearned(c)) learned++; if(isMature(c)) mature++; } }); return {total:ids.length,seen,learned,mature}; }
+function lastDays(n){ const out=[]; const d=new Date(); d.setDate(d.getDate()-(n-1)); for(let i=0;i<n;i++){ out.push(dayKey(d)); d.setDate(d.getDate()+1); } return out; }
+function sumLog(keys,f){ return keys.reduce((a,k)=>a+(S.log[k]&&S.log[k][f]||0),0); }
+function activitySvg(){
+  const days=lastDays(30), W=600, H=150, B=22, bw=W/30;
+  const max=Math.max(5,...days.map(k=>S.log[k]?S.log[k].n:0));
+  let bars='';
+  days.forEach((k,i)=>{ const l=S.log[k]; if(!l) return; const h=(H-B-8)*l.n/max, ho=(H-B-8)*l.ok/max, x=i*bw+2, w=bw-4;
+    bars+=`<g><title>${k}: ${l.n} answers, ${Math.round(l.ok/l.n*100)}% right</title><rect x="${x}" y="${H-B-h}" width="${w}" height="${h-ho}" style="fill:var(--bad)" rx="1"/><rect x="${x}" y="${H-B-ho}" width="${w}" height="${ho}" style="fill:var(--good)" rx="1"/></g>`; });
+  const lab=(i,t)=>`<text x="${i*bw+bw/2}" y="${H-6}" text-anchor="middle" style="fill:var(--muted);font-size:12px">${t}</text>`;
+  const short=k=>{ const [y,m,d]=k.split('-'); return +d+'.'+(+m)+'.'; };
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Answers per day, last 30 days"><line x1="0" x2="${W}" y1="${H-B}" y2="${H-B}" style="stroke:var(--line)"/>${bars}<text x="0" y="${H-6}" style="fill:var(--muted);font-size:12px">${short(days[0])}</text>${lab(14,short(days[14]))}<text x="${W}" y="${H-6}" text-anchor="end" style="fill:var(--muted);font-size:12px">today</text><text x="0" y="12" style="fill:var(--muted);font-size:12px">${max}</text></svg>`;
+}
+function forecastSvg(){
+  const W=600,H=150,B=22,n=14,bw=W/n; const start=new Date(); start.setHours(0,0,0,0);
+  const decks=[[S.cards,'var(--accent)','Reading'],[S.wcards,'var(--good)','Writing'],[S.dcards,'var(--muted)','Dictation']];
+  const counts=[...Array(n)].map(()=>[0,0,0]);
+  decks.forEach(([st],di)=>Object.values(st).forEach(c=>{ let d=Math.floor((c.due-start.getTime())/DAY); if(d<0) d=0; if(d<n) counts[d][di]++; }));
+  const max=Math.max(5,...counts.map(c=>c[0]+c[1]+c[2]));
+  let bars='';
+  counts.forEach((c,i)=>{ let y=H-B; const tot=c[0]+c[1]+c[2]; c.forEach((v,di)=>{ if(!v) return; const h=(H-B-8)*v/max; y-=h; bars+=`<rect x="${i*bw+3}" y="${y}" width="${bw-6}" height="${h}" style="fill:${decks[di][1]}"><title>${decks[di][2]}: ${v}</title></rect>`; });
+    const dt=new Date(start.getTime()+i*DAY);
+    bars+=`<text x="${i*bw+bw/2}" y="${H-6}" text-anchor="middle" style="fill:var(--muted);font-size:12px">${i===0?'today':dt.toLocaleDateString([], {weekday:'short'}).slice(0,2)}</text>`;
+    if (tot) bars+=`<text x="${i*bw+bw/2}" y="${y-4}" text-anchor="middle" style="fill:var(--ink);font-size:12px">${tot}</text>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Reviews due in the next 14 days"><line x1="0" x2="${W}" y1="${H-B}" y2="${H-B}" style="stroke:var(--line)"/>${bars}</svg>
+    <div class="legend">${decks.map(d=>`<span><i style="background:${d[1]}"></i>${d[2]}</span>`).join('')}</div>`;
+}
+function heatCell(k,label){
+  const e=S.lstat[k];
+  if (!e||e.n<3) return `<div class="heat none" title="Not enough answers yet"><span class="deva" lang="hi">${esc(label)}</span><small>${e?e.n+' seen':'–'}</small></div>`;
+  const p=Math.round(e.ok/e.n*100);
+  const mix=`color-mix(in srgb, var(--good) ${Math.max(0,(p-50)*2)}%, var(--bad))`;
+  return `<div class="heat" style="border-bottom-color:${mix};background:color-mix(in srgb, ${mix} 22%, var(--surface))" title="${esc(label)}: ${e.ok} of ${e.n} right"><span class="deva" lang="hi">${esc(label)}</span><small>${p}%</small></div>`;
+}
+function renderStats(){
+  view='stats';
+  const readIds=ORDER.filter(id=>CARD[id].type==='read');
+  const letters=deckStats(S.cards,readIds.filter(id=>CARD[id].kind==='letter'));
+  const combos=deckStats(S.cards,readIds.filter(id=>['syll','conj'].includes(CARD[id].kind)));
+  const words=deckStats(S.cards,readIds.filter(id=>['word','pseudo','phrase'].includes(CARD[id].kind)));
+  const writing=deckStats(S.wcards,WRITE_ITEMS.map(t=>'w:'+t));
+  const dict=deckStats(S.dcards,DICT_ITEMS.map(t=>'d:'+t));
+  const d30=lastDays(30), wk=lastDays(7), prev=lastDays(14).slice(0,7);
+  const r=sumLog(d30,'r'), rok=sumLog(d30,'rok');
+  const spd=keys=>{ const n=sumLog(keys,'msn'); return n?sumLog(keys,'ms')/n/1000:null; };
+  const s1=spd(wk), s0=spd(prev);
+  const active=Object.keys(S.log).length, total=Object.values(S.log).reduce((a,l)=>a+l.n,0);
+  const hard=[...Object.entries(S.cards).map(([id,c])=>[id,c,'Reading']),...Object.entries(S.wcards).map(([id,c])=>[id,c,'Writing']),...Object.entries(S.dcards).map(([id,c])=>[id,c,'Dictation'])]
+    .filter(([,c])=>c.lapses>0).sort((a,b)=>b[1].lapses-a[1].lapses).slice(0,8);
+  const row=(name,d)=>`<tr><td>${name}</td><td>${d.learned} <span class="muted">of ${d.total}</span></td><td>${d.mature}</td><td><span class="bar" style="width:120px;display:inline-block;vertical-align:middle"><i style="width:${d.seen/d.total*100}%"></i><i class="l" style="width:${d.learned/d.total*100}%"></i><i class="m" style="width:${d.mature/d.total*100}%"></i></span></td></tr>`;
+  const vargas=[0,5,10,15,20].map(i=>CONS_INFO.slice(i,i+5).map(c=>c[0]));
+  app.innerHTML=`<div class="studybar"><button class="btn quiet" id="back">Back to overview</button></div>
+  <div class="stats">
+    <section class="panel">
+      <h2>Progress</h2>
+      <div class="today">
+        <div><b>${r?Math.round(rok/r*100)+'%':'–'}</b><small>remembered on review (30 days)</small></div>
+        <div><b>${s1?s1.toFixed(1)+' s':'–'}</b><small>per reading card this week${s1&&s0?` (${s0.toFixed(1)} s the week before)`:''}</small></div>
+        <div><b>${streak()}</b><small>day streak</small></div>
+        <div><b>${total}</b><small>answers over ${active} day${active===1?'':'s'}</small></div>
+      </div>
+      <div class="wide"><table class="stat-table"><thead><tr><th></th><th>Learned</th><th>Mastered</th><th></th></tr></thead><tbody>
+        ${row('Letters',letters)}${row('Vowel signs and conjuncts',combos)}${row('Words and sentences',words)}${row('Writing',writing)}${row('Dictation',dict)}
+      </tbody></table></div>
+      <p class="small muted" style="margin:10px 0 0">Mastered means you'll next see it in three weeks or more. “Remembered on review” counts cards you had already learned, so it shows how well things stick.</p>
+    </section>
+    <div class="grid two" style="margin-top:22px">
+      <section class="panel"><h2>Last 30 days</h2>${activitySvg()}<p class="small muted" style="margin:6px 0 0">Answers per day: green right, red wrong.</p></section>
+      <section class="panel"><h2>Coming up</h2>${forecastSvg()}</section>
+    </div>
+    <section class="panel" style="margin-top:22px">
+      <h2>Accuracy by letter</h2>
+      <p class="small muted" style="margin:0 0 12px">From reading, dictation and the reading test. Only the syllable you got wrong counts against its letters; a letter needs 3 answers before it gets a colour.</p>
+      <h3 class="sh">Vowels</h3><div class="heatgrid">${VOWEL_INFO.map(v=>heatCell(v[0],v[0])).join('')}</div>
+      <h3 class="sh">Consonants</h3><div class="wide">${vargas.map(r=>`<div class="heatgrid five">${r.map(c=>heatCell(c,c)).join('')}</div>`).join('')}</div>
+      <div class="heatgrid">${CONS_INFO.slice(25).map(c=>heatCell(c[0],c[0])).join('')}</div>
+      <h3 class="sh">Vowel signs</h3><div class="heatgrid">${MATRA_KEYS.slice(1).map(m=>heatCell(m,'◌'+m)).join('')}</div>
+    </section>
+    <section class="panel" style="margin-top:22px">
+      <h2>Hardest cards</h2>
+      ${hard.length?`<ul class="summary-list" style="margin:0">${hard.map(([id,c,deck])=>{ const t=id.slice(2); return `<li><span class="deva">${esc(t)}</span><b>${esc(romanize(t))}</b><span class="muted small">${deck}, forgotten ${c.lapses}×</span></li>`; }).join('')}</ul>`
+        :'<p class="small muted" style="margin:0">Nothing yet. Cards you forget after learning them will be listed here.</p>'}
+    </section>
+  </div>`;
+  $('#back').onclick=renderHome;
+}
+
+/* ---------- Reference chart ---------- */
+function renderRef(){
+  view='ref';
+  const cell=(t,r)=>`<button class="ref-cell" data-t="${esc(t)}"><span class="deva" lang="hi">${esc(t)}</span><small>${esc(r)}</small></button>`;
+  const vargas=[CONS_INFO.slice(0,5),CONS_INFO.slice(5,10),CONS_INFO.slice(10,15),CONS_INFO.slice(15,20),CONS_INFO.slice(20,25)];
+  app.innerHTML=`<div class="studybar"><button class="btn quiet" id="back">Back to overview</button></div>
+  <section class="panel ref">
+    <h2>Letter chart</h2>
+    <div class="row" role="group" aria-label="What tapping does" style="margin-bottom:8px"><span class="small muted">Tap a letter to</span><button class="btn small primary" id="m-trace">Practise writing it</button>${HI_VOICE?'<button class="btn small quiet" id="m-hear">Hear it</button>':''}</div>
+    ${HI_VOICE?'':'<p class="small muted" style="margin:0">No Hindi voice was found on this device, so sound is off. On Windows or macOS you can add a Hindi voice in the system speech settings.</p>'}
+    <h3>Vowels</h3><div class="ref-grid">${VOWEL_INFO.map(([c])=>cell(c,VOW[VOWEL_LETTERS[c]][0])).join('')}</div>
+    <h3>Consonants, in the order of the mouth: throat, palate, curled tongue, teeth, lips</h3>
+    <div class="wide">${vargas.map(row=>`<div class="varga">${row.map(([c,r])=>cell(c,r[0])).join('')}</div>`).join('')}</div>
+    <div class="ref-grid">${CONS_INFO.slice(25,33).map(([c,r])=>cell(c,r[0])).join('')}</div>
+    <h3>Dotted letters</h3><div class="ref-grid">${CONS_INFO.slice(33).map(([c,r])=>cell(c,r[0])).join('')}</div>
+    <h3>Vowel signs on क</h3><div class="ref-grid">${['क',...MATRA_KEYS.slice(1).map(m=>'क'+m),'कं','काँ','कः'].map(t=>cell(t,romanize(t))).join('')}</div>
+    <h3>Common conjuncts</h3><div class="ref-grid">${[...UNIT_BY_ID.k1.cards,...UNIT_BY_ID.k2.cards,...UNIT_BY_ID.k3.cards].map(id=>cell(CARD[id].text,romanize(CARD[id].text))).join('')}</div>
+  </section>`;
+  $('#back').onclick=renderHome;
+  let mode='trace';
+  const setMode=m=>{ mode=m; [['m-trace','trace'],['m-hear','hear']].forEach(([id,v])=>{ const b=document.getElementById(id); if(b){ b.classList.toggle('primary',v===m); b.classList.toggle('quiet',v!==m); } }); };
+  $('#m-trace').onclick=()=>setMode('trace'); const mh=$('#m-hear'); if(mh) mh.onclick=()=>setMode('hear');
+  app.querySelectorAll('.ref-cell').forEach(b=>b.onclick=()=>{ if(mode==='hear') speak(b.dataset.t); else openTracer(b.dataset.t); });
+}
+
+/* ---------- Dialogs ---------- */
+const dlg=$('#dlg');
+function openDlg(html,bind){ dlg.innerHTML=html; dlg.showModal(); bind&&bind(); const x=dlg.querySelector('[data-close]'); if(x) x.onclick=()=>dlg.close(); }
+function showTyping(){
+  const rows=[['आ ा','aa or A'],['ई ी','ii, ee or I'],['ऊ ू','uu, oo or U'],['ट ठ ड ढ ण','T Th D Dh N (capitals)'],['त थ द ध न','t th d dh n'],['च छ','ch, then Ch or chh'],['श ष स','sh, Sh, s'],['ड़ ढ़','R, Rh'],['ख़ ग़ क़','Kh, G, q'],['ज़ फ़','z, f'],['ऋ ृ','Ri'],['ङ ञ','~N, ~n'],['ं','M, n or m'],['ँ','~, M or n'],['ः','H'],['ॉ','O'],['क्ष ज्ञ','kSh, gy']];
+  openDlg(`<h2>Romanization key</h2>
+  <p class="small">Answers are written in Latin letters. When typing, type how it sounds. Capitals mark the letters that English spelling can't tell apart, so the app can catch real mix-ups. IAST letters like ṭ, ā, ś also work. The silent “a” at the end of a word is optional: kamal and kamala both count.</p>
+  <table class="typing">${rows.map(([d,t])=>`<tr><td lang="hi">${esc(d)}</td><td><code>${esc(t)}</code></td></tr>`).join('')}</table>
+  <div class="actions"><button class="btn primary" data-close>Close</button></div>`);
+}
+function showSettings(){
+  const s=S.set;
+  openDlg(`<h2>Settings and backup</h2>
+  <div class="set-row"><label for="st-per">New cards per day<small>Letters come in small groups; words arrive once letters are learned.</small></label><input id="st-per" type="number" min="1" max="200" value="${s.perDay}" style="width:80px;padding:6px;border-radius:4px;border:1.5px solid var(--line);background:var(--bg)"></div>
+  <div class="set-row"><label for="st-ans">How you answer reading cards<small>Flip cards: read it, flip, rate yourself. Typing: the app checks your spelling letter by letter.</small></label><select id="st-ans" style="padding:6px;border-radius:4px;border:1.5px solid var(--line);background:var(--bg)"><option value="flip" ${s.answer==='flip'?'selected':''}>Flip cards</option><option value="type" ${s.answer==='type'?'selected':''}>Type the reading</option></select></div>
+  <div class="set-row"><label for="st-wper">New letters to write per day</label><input id="st-wper" type="number" min="1" max="100" value="${s.wPerDay}" style="width:80px;padding:6px;border-radius:4px;border:1.5px solid var(--line);background:var(--bg)"></div>
+  <div class="set-row"><label for="st-dper">New dictation items per day</label><input id="st-dper" type="number" min="1" max="100" value="${s.dPerDay}" style="width:80px;padding:6px;border-radius:4px;border:1.5px solid var(--line);background:var(--bg)"></div>
+  <div class="set-row"><label for="st-fonts">Vary the typeface<small>Shows some cards in a second font so you can read any style.</small></label><input id="st-fonts" type="checkbox" ${s.fonts?'checked':''}></div>
+  <div class="set-row"><label for="st-audio">Play sound after each answer<small>${HI_VOICE?'Uses the Hindi voice on this device.':'No Hindi voice found on this device yet.'}</small></label><input id="st-audio" type="checkbox" ${s.audio?'checked':''}></div>
+  <div class="set-row"><label for="st-len">Don't test vowel length when typing<small>Accept “a” for आ, “i” for ई, “u” for ऊ. Off is better for learning the script.</small></label><input id="st-len" type="checkbox" ${s.lenient?'checked':''}></div>
+  <div class="set-row"><label for="st-unlock">Unlock all steps<small>For when you already know part of the script.</small></label><input id="st-unlock" type="checkbox" ${s.unlockAll?'checked':''}></div>
+  <div class="set-row"><label>Backup<small>Progress lives in this browser only. Export it to move between computers, or between your local copy and GitHub Pages.</small></label>
+    <span class="row"><button class="btn quiet small" id="exp">Export</button><button class="btn quiet small" id="imp">Import</button></span></div>
+  <input type="file" id="impfile" accept="application/json,.json" hidden>
+  ${(()=>{ try{ return localStorage.getItem('akshar-lock-key') }catch(e){ return null } })()?`<div class="set-row"><label>Password<small>This device remembers your password. Lock it to ask for the password again next time.</small></label><button class="btn quiet small" id="lockdev">Lock this device</button></div>`:''}
+  <div class="set-row"><label>Reset<small>Deletes all progress in this browser.</small></label><button class="btn quiet small" id="reset" style="color:var(--bad)">Reset progress</button></div>
+  <p id="set-msg" class="small muted"></p>
+  <div class="actions"><button class="btn primary" id="save-set">Save</button><button class="btn quiet" data-close>Cancel</button></div>`, ()=>{
+    $('#save-set').onclick=()=>{
+      s.perDay=Math.max(1,Math.min(200,parseInt($('#st-per').value)||25));
+      s.wPerDay=Math.max(1,Math.min(100,parseInt($('#st-wper').value)||10)); s.dPerDay=Math.max(1,Math.min(100,parseInt($('#st-dper').value)||10)); s.answer=$('#st-ans').value;
+      s.fonts=$('#st-fonts').checked; s.audio=$('#st-audio').checked; s.lenient=$('#st-len').checked; s.unlockAll=$('#st-unlock').checked;
+      LENIENT=s.lenient; save(); dlg.close(); renderHome();
+    };
+    $('#exp').onclick=()=>{
+      const blob=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='akshar-progress-'+dayKey()+'.json'; document.body.appendChild(a); a.click(); a.remove();
+      $('#set-msg').textContent='Exported. Keep the file somewhere safe.';
+    };
+    $('#imp').onclick=()=>$('#impfile').click();
+    $('#impfile').onchange=e=>{
+      const f=e.target.files[0]; if(!f) return;
+      const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d||d.v!==1||typeof d.cards!=='object') throw 0; const base=defaults(); S=Object.assign(base,d,{set:Object.assign(base.set,d.set||{})}); LENIENT=S.set.lenient; save(); dlg.close(); renderHome(); }catch(err){ $('#set-msg').textContent='That file is not an Akshar backup. Choose a file made with Export.'; } };
+      r.readAsText(f);
+    };
+    const ld=$('#lockdev'); if(ld) ld.onclick=()=>{ try{ localStorage.removeItem('akshar-lock-key'); }catch(e){} location.reload(); };
+    $('#reset').onclick=()=>{ if(confirm('Delete all progress in this browser? Export first if you might want it back.')){ S=defaults(); save(); dlg.close(); renderHome(); } };
+  });
+}
+
+function bindSpeak(){ app.querySelectorAll('[data-speak]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); speak(b.dataset.speak); }); }
+
+/* ---------- Keyboard ---------- */
+document.addEventListener('keydown',e=>{
+  if (dlg.open || view!=='study' || !cur) return;
+  const flipSpace = e.key===' ' && cur.style==='flip' && cur.phase==='ask';
+  if (e.key==='Enter' || flipSpace){
+    if (cur.phase==='ask' && cur.askEnter){ e.preventDefault(); cur.askEnter(); return; }
+    if ((cur.phase==='fb' && Date.now()-cur.fbAt>350) || cur.phase==='intro'){ e.preventDefault(); cur.enter&&cur.enter(); }
+    return;
+  }
+  if (e.key==='Backspace' && cur.mode==='dict' && cur.phase==='ask'){ e.preventDefault(); cur.undo&&cur.undo(); return; }
+  if (cur.keys && cur.keys[e.key] && (((cur.mode==='pick'||cur.mode==='dict')&&cur.phase==='ask')||cur.phase==='fb')){ e.preventDefault(); cur.keys[e.key](); }
+});
+
+renderHome();
+</script>
+</body>
+</html>
